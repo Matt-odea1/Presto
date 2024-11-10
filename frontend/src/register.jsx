@@ -2,20 +2,30 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const Login = (props) => {
+const Register = (props) => {
   const { setLoggedIn, setEmail } = props;
+  const [name, setName] = useState("");
   const [email, setEmailInput] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [nameError, setNameError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
-  
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
+
   const navigate = useNavigate();
 
   const onButtonClick = () => {
+    setNameError("");
     setEmailError("");
     setPasswordError("");
+    setConfirmPasswordError("");
 
-    // Basic email and password validations
+    if (!name) {
+      setNameError("Please enter your name");
+      return;
+    }
+
     if (!email) {
       setEmailError("Please enter your email");
       return;
@@ -36,19 +46,29 @@ const Login = (props) => {
       return;
     }
 
+    if (!confirmPassword) {
+      setConfirmPasswordError("Please confirm your password");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setConfirmPasswordError("Passwords do not match");
+      return;
+    }
+
     // Call the API if validation passes
-    axios.post("http://localhost:5005/admin/auth/login", { email, password })
+    axios.post("http://localhost:5005/admin/auth/register", { name, email, password })
       .then((response) => {
         if (response.status === 200) {
-          setEmail(email);  // Set email in parent component
-          setLoggedIn(true);  // Set logged in status
-          navigate("/");  // Redirect to home
+          setEmail(email);  
+          setLoggedIn(true);  
+          navigate("/");
         }
       })
       .catch((error) => {
         if (error.response) {
           if (error.response.status === 400) {
-            setEmailError("Login failed. Please check your details.");
+            setEmailError("Registration failed. Please check your details.");
           } else {
             alert("An error occurred. Please try again later.");
           }
@@ -59,7 +79,17 @@ const Login = (props) => {
   return (
     <div className="mainContainer">
       <div className="titleContainer">
-        <div>Login</div>
+        <div>Register</div>
+      </div>
+      <br />
+      <div className="inputContainer">
+        <input
+          value={name}
+          placeholder="Enter your name here"
+          onChange={(ev) => setName(ev.target.value)}
+          className="inputBox"
+        />
+        <label className="errorLabel">{nameError}</label>
       </div>
       <br />
       <div className="inputContainer">
@@ -85,14 +115,25 @@ const Login = (props) => {
       <br />
       <div className="inputContainer">
         <input
+          type="password"
+          value={confirmPassword}
+          placeholder="Confirm your password"
+          onChange={(ev) => setConfirmPassword(ev.target.value)}
+          className="inputBox"
+        />
+        <label className="errorLabel">{confirmPasswordError}</label>
+      </div>
+      <br />
+      <div className="inputContainer">
+        <input
           className="inputButton"
           type="button"
           onClick={onButtonClick}
-          value="Log in"
+          value="Register"
         />
       </div>
     </div>
   );
 };
 
-export default Login;
+export default Register;

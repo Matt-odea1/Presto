@@ -13,6 +13,10 @@ const Home = (props) => {
     }
   }
 
+  const onRegisterClick = () => {
+    navigate('/register') // Navigate to the register page
+  }
+
   return (
     <div className="mainContainer">
       <div className="titleContainer">
@@ -26,7 +30,18 @@ const Home = (props) => {
           onClick={onButtonClick}
           value={loggedIn ? 'Log out' : 'Log in'}
         />
-        {loggedIn ? <div>Your email address is {email}</div> : <div />}
+        {loggedIn ? (
+          <div>Your email address is {email}</div>
+        ) : (
+          <div>
+            <input
+              className="inputButton"
+              type="button"
+              onClick={onRegisterClick}
+              value="Register" // Register button for logged-out users
+            />
+          </div>
+        )}
       </div>
     </div>
   )
