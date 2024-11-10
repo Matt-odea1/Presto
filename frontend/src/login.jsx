@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Login = (props) => {
   const { setLoggedIn, setEmail } = props;
@@ -7,14 +8,15 @@ const Login = (props) => {
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
-
+  
   const navigate = useNavigate();
 
-  const onButtonClick = () => {
+  const onButtonClick = async () => {
     setEmailError("");
     setPasswordError("");
 
-    if ("" === email) {
+    // Basic email and password validations
+    if (!email) {
       setEmailError("Please enter your email");
       return;
     }
@@ -24,14 +26,36 @@ const Login = (props) => {
       return;
     }
 
-    if ("" === password) {
+    if (!password) {
       setPasswordError("Please enter a password");
       return;
     }
 
-    if (password.length < 7) {
+    if (password.length < 8) {
       setPasswordError("The password must be 8 characters or longer");
       return;
+    }
+
+    try {
+      const response = await axios.post("/admin/auth/login", {
+        email,
+        password,
+      });
+
+      if (response.status === 200) {
+        setEmail(email);  
+        setLoggedIn(true); 
+        navigate("/");
+      }
+    } catch (error) {
+      // Handle API errors
+      if (error.response) {
+        if (error.response.status === 400) {
+          setEmailError("Registration failed. Please check your details.");
+        } else {
+          alert("An error occurred. Please try again later.");
+        }
+      }
     }
   };
 
