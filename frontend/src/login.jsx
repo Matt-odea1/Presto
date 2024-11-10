@@ -11,7 +11,7 @@ const Login = (props) => {
   
   const navigate = useNavigate();
 
-  const onButtonClick = async () => {
+  const onButtonClick = () => {
     setEmailError("");
     setPasswordError("");
 
@@ -36,27 +36,24 @@ const Login = (props) => {
       return;
     }
 
-    try {
-      const response = await axios.post("/admin/auth/login", {
-        email,
-        password,
-      });
-
-      if (response.status === 200) {
-        setEmail(email);  
-        setLoggedIn(true); 
-        navigate("/");
-      }
-    } catch (error) {
-      // Handle API errors
-      if (error.response) {
-        if (error.response.status === 400) {
-          setEmailError("Registration failed. Please check your details.");
-        } else {
-          alert("An error occurred. Please try again later.");
+    // Call the API if validation passes
+    axios.post("/admin/auth/login", { email, password })
+      .then((response) => {
+        if (response.status === 200) {
+          setEmail(email);  // Set email in parent component
+          setLoggedIn(true);  // Set logged in status
+          navigate("/");  // Redirect to home
         }
-      }
-    }
+      })
+      .catch((error) => {
+        if (error.response) {
+          if (error.response.status === 400) {
+            setEmailError("Login failed. Please check your details.");
+          } else {
+            alert("An error occurred. Please try again later.");
+          }
+        }
+      });
   };
 
   return (
