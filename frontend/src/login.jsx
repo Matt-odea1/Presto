@@ -1,25 +1,39 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Login = (props) => {
-  const { setLoggedIn, setEmail } = props
-  const [email, setEmailInput] = useState('')
-  const [password, setPassword] = useState('')
-  const [emailError, setEmailError] = useState('')
-  const [passwordError, setPasswordError] = useState('')
+  const { setLoggedIn, setEmail } = props;
+  const [email, setEmailInput] = useState("");
+  const [password, setPassword] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const onButtonClick = () => {
-    if (email && password) {
-      setEmail(email)
-      setLoggedIn(true)
-      navigate('/')
-    } else {
-      setEmailError(email ? '' : 'Email is required')
-      setPasswordError(password ? '' : 'Password is required')
+    setEmailError("");
+    setPasswordError("");
+
+    if ("" === email) {
+      setEmailError("Please enter your email");
+      return;
     }
-  }
+
+    if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
+      setEmailError("Please enter a valid email");
+      return;
+    }
+
+    if ("" === password) {
+      setPasswordError("Please enter a password");
+      return;
+    }
+
+    if (password.length < 7) {
+      setPasswordError("The password must be 8 characters or longer");
+      return;
+    }
+  };
 
   return (
     <div className="mainContainer">
@@ -49,10 +63,15 @@ const Login = (props) => {
       </div>
       <br />
       <div className="inputContainer">
-        <input className="inputButton" type="button" onClick={onButtonClick} value="Log in" />
+        <input
+          className="inputButton"
+          type="button"
+          onClick={onButtonClick}
+          value="Log in"
+        />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;
