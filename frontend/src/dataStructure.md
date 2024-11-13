@@ -6,7 +6,7 @@ userData =
     "presentations": [
       {
         "id": int,
-        "title": string,
+        "name": string,
         "description": string,
         "thumbnail": File,
         "default-background": {

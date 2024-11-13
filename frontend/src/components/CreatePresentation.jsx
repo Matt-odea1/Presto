@@ -1,27 +1,78 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { setData, getData } from '../components/Router.jsx';
 import '../styling/Create.css';
 
-const CreatePresentation = ({ closeModal, onCreate }) => {
+const CreatePresentation = ({ closeModal, userData, setUserData }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [thumbnail, setThumbnail] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getData();
+        if (data && data.store) {
+          setUserData(data);  // Save fetched data in the parent component state
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [setUserData]);
 
   const handleFileChange = (e) => {
     setThumbnail(e.target.files[0]);
   };
 
-  const handleCreate = () => {
+  const handleCreate = async () => {
     const newPresentation = {
+      id: Date.now(),
       name,
       description,
       thumbnail,
-      id: Date.now(),
+      defaultBackground: {
+        colour: "#ffffff",
+        img: undefined,
+      },
+      slides: [],
     };
-    
-    // Call the onCreate function passed from parent (Dashboard) to handle new presentation
-    onCreate(newPresentation);
-    closeModal(); // Close the modal after creation
+
+    // Ensure user data is loaded
+    if (!userData || !userData.store) {
+      console.error("User data is unavailable.");
+      return;
+    }
+
+    // Update the presentations array in userData
+    const updatedUserData = {
+      store: {
+        ...userData.store,
+        presentations: [...userData.store.presentations, newPresentation],
+      },
+    };
+
+    try {
+      // Save the updated user data
+      await setData(updatedUserData);
+
+      // Update the userData in the parent component
+      setUserData(updatedUserData);
+
+      // Close the modal
+      closeModal();
+    } catch (error) {
+      console.error("Error creating presentation:", error);
+    }
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="modalBackground">
