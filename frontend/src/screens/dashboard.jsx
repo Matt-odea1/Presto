@@ -1,15 +1,8 @@
 // src/pages/dashboard.js
-import { useNavigate } from 'react-router-dom';
+import LogoutButton from './../components/Logout'; // Import the new LogoutButton component
 
 const Dashboard = (props) => {
   const { setLoggedIn } = props;
-  const navigate = useNavigate();
-
-  const onLogoutClick = () => {
-    setLoggedIn(false);
-    localStorage.removeItem('authToken');
-    navigate('/');
-  };
 
   return (
     <div className="mainContainer">
@@ -18,12 +11,7 @@ const Dashboard = (props) => {
       </div>
       <div>Welcome to your dashboard!</div>
       <div className="buttonContainer">
-        <input
-          className="inputButton"
-          type="button"
-          onClick={onLogoutClick}
-          value="Log out"
-        />
+        <LogoutButton setLoggedIn={setLoggedIn} /> {/* Use the LogoutButton here */}
       </div>
     </div>
   );
