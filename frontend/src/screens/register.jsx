@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import ErrorPopup from './../components/ErrorPopup';
@@ -18,12 +18,16 @@ const Register = (props) => {
 
   const navigate = useNavigate();
 
-  const onButtonClick = () => {
+  const onFormSubmit = (event) => {
+    event.preventDefault(); // Prevents the default form submission behavior (page refresh)
+    
+    // Clear previous errors
     setNameError("");
     setEmailError("");
     setPasswordError("");
     setConfirmPasswordError("");
 
+    // Validation checks
     if (!name) {
       setNameError("Please enter your name");
       return;
@@ -95,56 +99,61 @@ const Register = (props) => {
         Back to Landing Page
       </button>
       <br />
-      <div className="inputContainer">
-        <input
-          value={name}
-          placeholder="Enter your name here"
-          onChange={(ev) => setName(ev.target.value)}
-          className="inputBox"
-        />
-        <label className="errorLabel">{nameError}</label>
-      </div>
-      <br />
-      <div className="inputContainer">
-        <input
-          value={email}
-          placeholder="Enter your email here"
-          onChange={(ev) => setEmailInput(ev.target.value)}
-          className="inputBox"
-        />
-        <label className="errorLabel">{emailError}</label>
-      </div>
-      <br />
-      <div className="inputContainer">
-        <input
-          type="password"
-          value={password}
-          placeholder="Enter your password here"
-          onChange={(ev) => setPassword(ev.target.value)}
-          className="inputBox"
-        />
-        <label className="errorLabel">{passwordError}</label>
-      </div>
-      <br />
-      <div className="inputContainer">
-        <input
-          type="password"
-          value={confirmPassword}
-          placeholder="Confirm your password"
-          onChange={(ev) => setConfirmPassword(ev.target.value)}
-          className="inputBox"
-        />
-        <label className="errorLabel">{confirmPasswordError}</label>
-      </div>
-      <br />
-      <div className="inputContainer">
-        <input
-          className="inputButton"
-          type="button"
-          onClick={onButtonClick}
-          value="Register"
-        />
-      </div>
+      
+      {/* Use form for better accessibility */}
+      <form onSubmit={onFormSubmit}>
+        <div className="inputContainer">
+          <input
+            value={name}
+            placeholder="Enter your name here"
+            onChange={(ev) => setName(ev.target.value)}
+            className="inputBox"
+          />
+          <label className="errorLabel">{nameError}</label>
+        </div>
+        <br />
+        <div className="inputContainer">
+          <input
+            value={email}
+            placeholder="Enter your email here"
+            onChange={(ev) => setEmailInput(ev.target.value)}
+            className="inputBox"
+          />
+          <label className="errorLabel">{emailError}</label>
+        </div>
+        <br />
+        <div className="inputContainer">
+          <input
+            type="password"
+            value={password}
+            placeholder="Enter your password here"
+            onChange={(ev) => setPassword(ev.target.value)}
+            className="inputBox"
+          />
+          <label className="errorLabel">{passwordError}</label>
+        </div>
+        <br />
+        <div className="inputContainer">
+          <input
+            type="password"
+            value={confirmPassword}
+            placeholder="Confirm your password"
+            onChange={(ev) => setConfirmPassword(ev.target.value)}
+            className="inputBox"
+          />
+          <label className="errorLabel">{confirmPasswordError}</label>
+        </div>
+        <br />
+        <div className="inputContainer">
+          {/* Submit button for the form */}
+          <input
+            className="inputButton"
+            type="submit"
+            value="Register"
+          />
+        </div>
+      </form>
+
       {showError && (
         <ErrorPopup message={errorMessage} onClose={() => setShowError(false)} />
       )}

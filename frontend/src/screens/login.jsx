@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import ErrorPopup from './../components/ErrorPopup';
@@ -50,12 +50,28 @@ const Login = (props) => {
           setErrorMessage("An error occurred. Please try again later.");
           setShowError(true);
         }
+        document.addEventListener("keydown", handleKeyPress);
       });
   };
 
   const onBackButtonClick = () => {
     navigate("/");
   };
+
+  // Handle Enter key press to submit the form from anywhere
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      onButtonClick();
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyPress);
+    return () => {
+      document.removeEventListener("keydown", handleKeyPress);
+    };
+  }, []);
 
   return (
     <div className="mainContainer">
@@ -102,6 +118,5 @@ const Login = (props) => {
     </div>
   );
 };
-
 
 export default Login;
