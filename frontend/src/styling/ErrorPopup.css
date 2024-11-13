@@ -1,0 +1,30 @@
+.error-popup {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: rgba(255, 0, 0, 0.9);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+  }
+  
+  .error-popup-content {
+    display: flex;
+    align-items: center;
+  }
+  
+  .error-popup-message {
+    margin-right: 10px;
+  }
+  
+  .error-popup-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+  }

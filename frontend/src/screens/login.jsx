@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import ErrorPopup from './../components/ErrorPopup';
 
 const Login = (props) => {
   const { setLoggedIn, setEmail } = props;
@@ -8,6 +9,8 @@ const Login = (props) => {
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
   
   const navigate = useNavigate();
 
@@ -31,29 +34,27 @@ const Login = (props) => {
       return;
     }
 
-    if (password.length < 8) {
-      setPasswordError("The password must be 8 characters or longer");
-      return;
-    }
-
-    // Call the API if validation passes
     axios.post("http://localhost:5005/admin/auth/login", { email, password })
       .then((response) => {
         if (response.status === 200) {
-          setEmail(email);  // Set email in parent component
-          setLoggedIn(true);  // Set logged in status
-          navigate("/");  // Redirect to home
+          setEmail(email);
+          setLoggedIn(true);
+          navigate("/");
         }
       })
       .catch((error) => {
-        if (error.response) {
-          if (error.response.status === 400) {
-            setEmailError("Login failed. Please check your details.");
-          } else {
-            alert("An error occurred. Please try again later.");
-          }
+        if (error.response && error.response.status === 400) {
+          setErrorMessage("Login failed. Please check your details.");
+          setShowError(true);
+        } else {
+          setErrorMessage("An error occurred. Please try again later.");
+          setShowError(true);
         }
       });
+  };
+
+  const onBackButtonClick = () => {
+    navigate("/");
   };
 
   return (
@@ -61,6 +62,9 @@ const Login = (props) => {
       <div className="titleContainer">
         <div>Login</div>
       </div>
+      <button className="backButton" onClick={onBackButtonClick}>
+        Back to Landing Page
+      </button>
       <br />
       <div className="inputContainer">
         <input
@@ -91,8 +95,13 @@ const Login = (props) => {
           value="Log in"
         />
       </div>
+
+      {showError && (
+        <ErrorPopup message={errorMessage} onClose={() => setShowError(false)} />
+      )}
     </div>
   );
 };
+
 
 export default Login;

@@ -1,9 +1,9 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Home from './home';
-import Login from './login';
-import Register from './register'; // Import the Register component
-import './App.css';
-import './index.css';
+import Home from './screens/home';
+import Login from './screens/login';
+import Register from './screens/register'; // Import the Register component
+import './styling/App.css';
+import './styling/index.css';
 import { useState } from 'react';
 
 function App() {
@@ -19,7 +19,7 @@ function App() {
             element={<Home email={email} loggedIn={loggedIn} setLoggedIn={setLoggedIn} />}
           />
           <Route path="/login" element={<Login setLoggedIn={setLoggedIn} setEmail={setEmail} />} />
-          <Route path="/register" element={<Register setLoggedIn={setLoggedIn} setEmail={setEmail} />} /> {/* Add Register route */}
+          <Route path="/register" element={<Register setLoggedIn={setLoggedIn} setEmail={setEmail} />} />
         </Routes>
       </BrowserRouter>
     </div>
