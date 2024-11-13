@@ -7,7 +7,7 @@ const PresentationOptions = ({ onClose, onEdit, onView }) => {
     <div className="popupOverlay">
       <div className="popupContent">
         <button onClick={onEdit}>Edit Presentation</button>
-        <button onClick={onView}>View Presentation</button>
+        <button onClick={onView}>Preview Presentation</button>
         <button onClick={onClose} className="closeButton">Close</button>
       </div>
     </div>

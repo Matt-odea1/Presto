@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import LogoutButton from '../components/Logout';
-import { getData } from '../components/Router';
+import { getData, useCustomNavigation } from '../components/Router';
 import CreatePresentation from '../components/CreatePresentation';
 import PresentationOptions from '../components/PresentationOptions';
 import '../styling/dashboard.css';
@@ -11,8 +11,10 @@ const Dashboard = ({ setLoggedIn }) => {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [presentations, setPresentations] = useState([]);
-  const [selectedPresentation, setSelectedPresentation] = useState(null);  // Track selected presentation
-  const [isOptionsOpen, setIsOptionsOpen] = useState(false);  // Track if options popup is open
+  const [selectedPresentation, setSelectedPresentation] = useState(null);
+  const [isOptionsOpen, setIsOptionsOpen] = useState(false);
+  const { navigateToSlideDeck } = useCustomNavigation(); 
+
   
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -58,14 +60,14 @@ const Dashboard = ({ setLoggedIn }) => {
 
   const handleEdit = () => {
     closeOptions();
-    // navigate(`/presentation/edit/${selectedPresentation.id}`);
+    navigateToSlideDeck(selectedPresentation.id);
     console.log(`Edit presentation with ID: ${selectedPresentation.id}`);
   };
 
   const handleView = () => {
     closeOptions();
     // Example: navigate(`/presentation/view/${selectedPresentation.id}`);
-    console.log(`View presentation with ID: ${selectedPresentation.id}`);
+    console.log(`Preview presentation with ID: ${selectedPresentation.id}`);
   };
 
   if (loading) {
