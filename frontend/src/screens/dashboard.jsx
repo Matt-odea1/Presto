@@ -7,9 +7,19 @@ import logo from '../assets/presto.png';
 
 const Dashboard = ({ setLoggedIn }) => {
   const [userData, loadData] = useState(undefined);
-  const [loading, setLoading] = useState(true); // Added loading state
+  const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [presentations, setPresentations] = useState([]);
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
-  // Fetch user data on component mount
+  const handleCreatePresentation = (newPresentation) => {
+    setPresentations((prevPresentations) => [
+      ...prevPresentations,
+      newPresentation,
+    ]);
+  };
+
   useEffect(() => {
     console.log('useEffect: Fetching user data');
     const fetchUserData = async () => {
@@ -32,10 +42,10 @@ const Dashboard = ({ setLoggedIn }) => {
     };
     
     fetchUserData();
-  }, []); // Empty dependency array to ensure this runs once
+  }, []);
 
   if (loading) {
-    return <div>Loading...</div>; // Render loading state
+    return <div>Loading...</div>;
   }
 
   return (
@@ -52,35 +62,33 @@ const Dashboard = ({ setLoggedIn }) => {
           <div className="userInfo">User data unavailable</div>
         )}
         <div className="actions">
-          <button className="createPresentationButton">Create Presentation</button>
+          <button onClick={openModal}>New Presentation</button>
           <LogoutButton setLoggedIn={setLoggedIn} />
         </div>
       </div>
-
-      {/* Blank content area */}
       <div className="contentArea">
-        <div>Item 1</div>
-        <div>Item 2</div>
-        <div>Item 3</div>
-        <div>Item 4</div>
-        <div>Item 1</div>
-        <div>Item 2</div>
-        <div>Item 3</div>
-        <div>Item 4</div>
-        <div>Item 1</div>
-        <div>Item 2</div>
-        <div>Item 3</div>
-        <div>Item 4</div>
-        <div>Item 2</div>
-        <div>Item 3</div>
-        <div>Item 4</div>
-        <div>Item 1</div>
-        <div>Item 2</div>
-        <div>Item 3</div>
-        <div>Item 4</div>
-
-        {/* More items can be added dynamically */}
+        {presentations.map((presentation) => (
+          <div key={presentation.id} className="presentationItem">
+            <img
+              src={presentation.thumbnail ? URL.createObjectURL(presentation.thumbnail) : ''}
+              alt="Thumbnail"
+              className="presentationThumbnail"
+            />
+            <h3>{presentation.name}</h3>
+            <p>{presentation.description}</p>
+          </div>
+        ))}
+        <div>Box 1</div>
+        <div>Box 2</div>
+        <div>Box 3</div>
+        <div>Box 4</div>
       </div>
+      {isModalOpen && (
+        <CreatePresentation
+          closeModal={closeModal}
+          onCreate={handleCreatePresentation}
+        />
+      )}
     </div>
   );
 };
