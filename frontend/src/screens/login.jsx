@@ -15,12 +15,11 @@ const Login = (props) => {
   const navigate = useNavigate();
 
   const onFormSubmit = (event) => {
-    event.preventDefault(); // Prevent default form submission behavior
+    event.preventDefault();
     
     setEmailError("");
     setPasswordError("");
 
-    // Basic email and password validations
     if (!email) {
       setEmailError("Please enter your email");
       return;
@@ -40,6 +39,7 @@ const Login = (props) => {
     axios.post("http://localhost:5005/admin/auth/login", { email, password })
       .then((response) => {
         if (response.status === 200) {
+          localStorage.setItem('authToken', response.data.token);
           setEmail(email);
           setLoggedIn(true);
           navigate("/");
@@ -59,21 +59,6 @@ const Login = (props) => {
   const onBackButtonClick = () => {
     navigate("/");
   };
-
-  // Handle Enter key press to submit the form from anywhere
-  const handleKeyPress = (event) => {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      onFormSubmit(event); // Trigger form submission
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("keydown", handleKeyPress);
-    return () => {
-      document.removeEventListener("keydown", handleKeyPress);
-    };
-  }, []);
 
   return (
     <div className="mainContainer">
@@ -109,7 +94,6 @@ const Login = (props) => {
         </div>
         <br />
         <div className="inputContainer">
-          {/* Submit button for the form */}
           <input
             className="inputButton"
             type="submit"

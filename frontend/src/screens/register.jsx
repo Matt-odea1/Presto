@@ -67,6 +67,7 @@ const Register = (props) => {
     axios.post("http://localhost:5005/admin/auth/register", { name, email, password })
       .then((response) => {
         if (response.status === 200) {
+          localStorage.setItem('authToken', response.data.token);
           setEmail(email);  
           setLoggedIn(true);  
           navigate("/");

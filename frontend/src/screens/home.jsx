@@ -1,49 +1,45 @@
-import { useNavigate } from 'react-router-dom'
+// src/pages/Home.js
+import { useEffect } from 'react';
+import { useCustomNavigation } from './../components/Router';
 
 const Home = (props) => {
-  const { loggedIn, email, setLoggedIn } = props
-  const navigate = useNavigate()
+  const { loggedIn, email, setLoggedIn } = props;
+  const { navigateToLogin, navigateToRegister } = useCustomNavigation();
 
-  const onButtonClick = () => {
+  useEffect(() => {
+    // Redirect to another page if the user is logged in
     if (loggedIn) {
-      setLoggedIn(false)
-    } else {
-      navigate('/login')
+      // Replace with your desired redirect (e.g., dashboard or profile page)
+      window.location.href = '/dashboard'; // or use navigate('/dashboard') if you prefer using react-router
     }
-  }
-
-  const onRegisterClick = () => {
-    navigate('/register') // Navigate to the register page
-  }
+  }, [loggedIn]);
 
   return (
     <div className="mainContainer">
       <div className="titleContainer">
         <div>Welcome!</div>
       </div>
-      <div>This is the home page.</div>
+      <div>This is the landing page. Please log in or register.</div>
       <div className="buttonContainer">
         <input
           className="inputButton"
           type="button"
-          onClick={onButtonClick}
+          onClick={() => navigateToLogin(loggedIn, setLoggedIn)}
           value={loggedIn ? 'Log out' : 'Log in'}
         />
-        {loggedIn ? (
-          <div>Your email address is {email}</div>
-        ) : (
+        {!loggedIn && (
           <div>
             <input
               className="inputButton"
               type="button"
-              onClick={onRegisterClick}
-              value="Register" // Register button for logged-out users
+              onClick={navigateToRegister}
+              value="Register"
             />
           </div>
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
