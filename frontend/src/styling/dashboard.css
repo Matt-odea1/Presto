@@ -102,3 +102,14 @@
   .closeButton {
     color: red;
   }
+
+  .newPreso {
+    border: none;
+    background: darkgreen;
+    color: white;
+    padding: 8px 16px;
+    margin: 8px;
+    font-size: 1.2em;
+    border-radius: 8px;
+    cursor: pointer;
+  }

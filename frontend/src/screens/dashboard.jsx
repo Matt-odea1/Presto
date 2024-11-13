@@ -85,7 +85,7 @@ const Dashboard = ({ setLoggedIn }) => {
           <div className="userInfo">User data unavailable</div>
         )}
         <div className="actions">
-          <button onClick={openModal}>New Presentation</button>
+          <button className="newPreso" onClick={openModal}>New Presentation</button>
           <LogoutButton setLoggedIn={setLoggedIn} />
         </div>
       </div>
