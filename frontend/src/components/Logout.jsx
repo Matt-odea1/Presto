@@ -4,28 +4,36 @@ import axios from 'axios';
 const LogoutButton = ({ setLoggedIn }) => {
   const navigate = useNavigate();
 
-  const onLogoutClick = async () => {
-    try {
-      const token = localStorage.getItem('authToken');
+  const onLogoutClick = () => {
+    const token = localStorage.getItem('authToken');
 
-      if (token) {
-        await axios.post(
-          '/admin/auth/logout', 
-          {}, 
+    if (token) {
+      axios
+        .post(
+          'http://localhost:5005/admin/auth/logout',
+          {},
           {
-            headers: { 
-              Authorization: `Bearer ${token}`
-            }
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
-        );
-      }
+        )
+        .then(() => {
+          // Remove the token and update the logged-in state
+          localStorage.removeItem('authToken');
+          setLoggedIn(false);
 
+          // Navigate to the home page
+          navigate('/');
+        })
+        .catch((error) => {
+          console.error('Logout error', error);
+        });
+    } else {
+      // If no token, simply log the user out and navigate
       localStorage.removeItem('authToken');
       setLoggedIn(false);
-
       navigate('/');
-    } catch (error) {
-      console.error('Logout error', error);
     }
   };
 
