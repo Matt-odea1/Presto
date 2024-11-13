@@ -1,5 +1,4 @@
 // PresentationOptions.jsx
-import React from 'react';
 import '../styling/dashboard.css';
 
 const PresentationOptions = ({ onClose, onEdit, onView }) => {

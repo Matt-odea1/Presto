@@ -1,7 +1,7 @@
 import { useCustomNavigation } from './../components/Router';
 
 const Home = (props) => {
-  const { loggedIn, email, setLoggedIn } = props;
+  const { loggedIn, setLoggedIn } = props;
   const { navigateToLogin, navigateToRegister } = useCustomNavigation();
 
   return (

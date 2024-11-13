@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { setData, getData, useCustomNavigation } from '../components/Router.jsx';
 import '../styling/Create.css';
 

@@ -102,8 +102,8 @@ const Dashboard = ({ setLoggedIn }) => {
             >
               <img
                 src={presentation.thumbnail instanceof File 
-                    ? URL.createObjectURL(presentation.thumbnail) 
-                    : ''}
+                  ? URL.createObjectURL(presentation.thumbnail) 
+                  : ''}
                 alt="Thumbnail"
                 className="presentationThumbnail"
               />
