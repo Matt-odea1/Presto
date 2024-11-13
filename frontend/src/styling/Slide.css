@@ -1,0 +1,62 @@
+.slideContainer {
+    display: flex;
+    height: 100vh;
+    background-color: #f7f9fc;
+  }
+
+  .mainContent {
+    flex-grow: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+  }
+  
+  .mainContent h2 {
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+    color: #333;
+  }
+  
+  .mainContent p {
+    font-size: 1rem;
+    margin-bottom: 20px;
+    color: #666;
+  }
+  
+  .slideEditor {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .slideItem {
+    margin-bottom: 10px;
+  }
+  
+  .slideItem textarea {
+    width: 100%;
+    height: 300px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #333;
+    resize: none;
+  }
+  
+  button {
+    align-self: flex-start;
+    padding: 10px 20px;
+    background-color: #5a67d8;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: 20px;
+  }
+  
+  button:hover {
+    background-color: #4c51bf;
+  }
