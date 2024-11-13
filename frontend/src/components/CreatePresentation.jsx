@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { setData, getData } from '../components/Router.jsx';
+import { setData, getData, useCustomNavigation } from '../components/Router.jsx';
 import '../styling/Create.css';
 
 const CreatePresentation = ({ closeModal, userData, setUserData }) => {
@@ -7,13 +7,15 @@ const CreatePresentation = ({ closeModal, userData, setUserData }) => {
   const [description, setDescription] = useState('');
   const [thumbnail, setThumbnail] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { navigateToSlideDeck } = useCustomNavigation(); 
+
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await getData();
         if (data && data.store) {
-          setUserData(data);  // Save fetched data in the parent component state
+          setUserData(data);
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -42,13 +44,11 @@ const CreatePresentation = ({ closeModal, userData, setUserData }) => {
       slides: [],
     };
 
-    // Ensure user data is loaded
     if (!userData || !userData.store) {
       console.error("User data is unavailable.");
       return;
     }
 
-    // Update the presentations array in userData
     const updatedUserData = {
       store: {
         ...userData.store,
@@ -59,12 +59,9 @@ const CreatePresentation = ({ closeModal, userData, setUserData }) => {
     try {
       // Save the updated user data
       await setData(updatedUserData);
-
-      // Update the userData in the parent component
       setUserData(updatedUserData);
-
-      // Close the modal
       closeModal();
+      navigateToSlideDeck(newPresentation.id);
     } catch (error) {
       console.error("Error creating presentation:", error);
     }

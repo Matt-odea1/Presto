@@ -3,6 +3,7 @@ import Home from './screens/home';
 import Login from './screens/login';
 import Register from './screens/register'; 
 import Dashboard from './screens/dashboard';
+import Slide from './screens/slide';
 import './styling/App.css';
 import './styling/index.css';
 import { useState, useEffect } from 'react';
@@ -43,6 +44,10 @@ function App() {
             path="/dashboard" 
             element={loggedIn ? <Dashboard setLoggedIn={setLoggedIn} /> : <Navigate to="/login" />} 
           />
+
+          <Route 
+            path="/presentation/:id" element={<Slide />} />  {/* Dynamic route */}
+
         </Routes>
       </BrowserRouter>
     </div>

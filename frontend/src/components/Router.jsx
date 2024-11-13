@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-
 // Function to set data
 export const setData = async (data) => {
   try {
@@ -12,8 +11,8 @@ export const setData = async (data) => {
       {
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
+          'Content-Type': 'application/json',
+        },
       }
     );
     console.log('Data successfully updated:', response.data);
@@ -30,14 +29,14 @@ export const getData = async () => {
     if (!token) {
       console.log('No authToken in localStorage');
     }
-    
+
     console.log('Making API call to get data...');
     const response = await axios.get(
       'http://localhost:5005/store',
       {
         headers: {
           Authorization: `Bearer ${token}`,
-        }
+        },
       }
     );
 
@@ -74,5 +73,15 @@ export const useCustomNavigation = () => {
     navigate('/dashboard');
   };
 
-  return { navigateToLogin, navigateToRegister, navigateToDashboard };
+  // Navigate to a slide deck for editing
+  const navigateToSlideDeck = (presentationId) => {
+    navigate(`/presentation/${presentationId}`);
+  };
+
+  return {
+    navigateToLogin,
+    navigateToRegister,
+    navigateToDashboard,
+    navigateToSlideDeck,
+  };
 };
