@@ -1,5 +1,4 @@
-// src/pages/dashboard.js
-import LogoutButton from './../components/Logout'; // Import the new LogoutButton component
+import LogoutButton from './../components/LogoutButton';
 
 const Dashboard = (props) => {
   const { setLoggedIn } = props;
@@ -11,7 +10,7 @@ const Dashboard = (props) => {
       </div>
       <div>Welcome to your dashboard!</div>
       <div className="buttonContainer">
-        <LogoutButton setLoggedIn={setLoggedIn} /> {/* Use the LogoutButton here */}
+        <LogoutButton setLoggedIn={setLoggedIn} />
       </div>
     </div>
   );

@@ -1,13 +1,32 @@
-// src/components/LogoutButton.js
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const LogoutButton = ({ setLoggedIn }) => {
   const navigate = useNavigate();
 
-  const onLogoutClick = () => {
-    setLoggedIn(false);
-    localStorage.removeItem('authToken');
-    navigate('/');
+  const onLogoutClick = async () => {
+    try {
+      const token = localStorage.getItem('authToken');
+
+      if (token) {
+        await axios.post(
+          '/admin/auth/logout', 
+          {}, 
+          {
+            headers: { 
+              Authorization: `Bearer ${token}`
+            }
+          }
+        );
+      }
+
+      localStorage.removeItem('authToken');
+      setLoggedIn(false);
+
+      navigate('/');
+    } catch (error) {
+      console.error('Logout error', error);
+    }
   };
 
   return (
