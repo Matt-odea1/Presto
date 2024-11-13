@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import ErrorPopup from './../components/ErrorPopup';
 
 const Register = (props) => {
   const { setLoggedIn, setEmail } = props;
@@ -12,6 +13,8 @@ const Register = (props) => {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
+  const [showError, setShowError] = useState(false); 
+  const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
 
@@ -68,12 +71,19 @@ const Register = (props) => {
       .catch((error) => {
         if (error.response) {
           if (error.response.status === 400) {
-            setEmailError("Registration failed. Please check your details.");
+            setErrorMessage("Registration failed. Please check your details.");
+            setShowError(true);
           } else {
-            alert("An error occurred. Please try again later.");
+            setErrorMessage("An error occurred. Please try again later.");
+            setShowError(true);
           }
         }
       });
+  };
+
+  // Back button handler
+  const onBackButtonClick = () => {
+    navigate("/");
   };
 
   return (
@@ -81,6 +91,9 @@ const Register = (props) => {
       <div className="titleContainer">
         <div>Register</div>
       </div>
+      <button className="backButton" onClick={onBackButtonClick}>
+        Back to Landing Page
+      </button>
       <br />
       <div className="inputContainer">
         <input
@@ -132,6 +145,9 @@ const Register = (props) => {
           value="Register"
         />
       </div>
+      {showError && (
+        <ErrorPopup message={errorMessage} onClose={() => setShowError(false)} />
+      )}
     </div>
   );
 };

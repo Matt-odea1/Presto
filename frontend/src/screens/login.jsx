@@ -10,7 +10,7 @@ const Login = (props) => {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-
+  const [showError, setShowError] = useState(false); 
   
   const navigate = useNavigate();
 
