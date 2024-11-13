@@ -18,7 +18,6 @@ const Sidebar = ({ slides, activeSlideIndex, setActiveSlide, addNewSlide }) => {
             ) : (
               <div className="placeholder" />
             )}
-            <p className="thumbnail-text">{slide.title || `Slide ${index + 1}`}</p>
           </div>
         ))}
       </div>

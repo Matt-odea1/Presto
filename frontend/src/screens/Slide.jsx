@@ -70,7 +70,6 @@ const Slide = () => {
             </div>
           )}
         </div>
-        <button onClick={handleAddSlide}>Add New Slide</button>
       </div>
     </div>
   );
