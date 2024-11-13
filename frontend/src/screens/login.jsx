@@ -42,7 +42,6 @@ const Login = (props) => {
           localStorage.setItem('authToken', response.data.token);
           setEmail(email);
           setLoggedIn(true);
-          navigate("/");
         }
       })
       .catch((error) => {

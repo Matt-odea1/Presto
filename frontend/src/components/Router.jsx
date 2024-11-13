@@ -1,6 +1,8 @@
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-// Function to set (update) data
+
+// Function to set data
 export const setData = async (data) => {
   try {
     const token = localStorage.getItem('authToken');
@@ -22,10 +24,14 @@ export const setData = async (data) => {
   }
 };
 
-// Function to get (retrieve) data
 export const getData = async () => {
   try {
     const token = localStorage.getItem('authToken');
+    if (!token) {
+      console.log('No authToken in localStorage');
+    }
+    
+    console.log('Making API call to get data...');
     const response = await axios.get(
       'http://localhost:5005/store',
       {
@@ -34,6 +40,7 @@ export const getData = async () => {
         }
       }
     );
+
     console.log('Data retrieved successfully:', response.data);
     return response.data;
   } catch (error) {
@@ -45,32 +52,27 @@ export const getData = async () => {
 export const useCustomNavigation = () => {
   const navigate = useNavigate();
 
-  // Function to handle login or logout navigation
+  // Navigate to login page
   const navigateToLogin = (loggedIn, setLoggedIn) => {
     if (loggedIn) {
-      // Log out the user
       setLoggedIn(false);
-      localStorage.removeItem('authToken'); // Remove auth token if needed
-      navigate('/'); // Redirect to home or any other page
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('email');
+      navigate('/');
     } else {
-      // Redirect to login page
       navigate('/login');
     }
   };
 
-  // Function to handle register navigation
+  // Navigate to register page
   const navigateToRegister = () => {
     navigate('/register');
   };
 
-  // Function to handle navigation to dashboard
+  // Navigate to dashboard page
   const navigateToDashboard = () => {
     navigate('/dashboard');
   };
 
-  return {
-    navigateToLogin,
-    navigateToRegister,
-    navigateToDashboard,
-  };
+  return { navigateToLogin, navigateToRegister, navigateToDashboard };
 };

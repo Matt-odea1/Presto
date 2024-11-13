@@ -45,7 +45,7 @@ function App() {
           {/* Dashboard route, only accessible if logged in */}
           <Route 
             path="/dashboard" 
-            element={loggedIn ? <Dashboard setLoggedIn={setLoggedIn} /> : <Navigate to="/" />} 
+            element={loggedIn ? <Dashboard setLoggedIn={setLoggedIn} /> : <Navigate to="/login" />} 
           />
         </Routes>
       </BrowserRouter>

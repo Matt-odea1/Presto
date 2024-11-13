@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import ErrorPopup from './../components/ErrorPopup';
+import { setData } from "../components/Router";
 
 const Register = (props) => {
   const { setLoggedIn, setEmail } = props;
@@ -70,7 +71,15 @@ const Register = (props) => {
           localStorage.setItem('authToken', response.data.token);
           setEmail(email);  
           setLoggedIn(true);  
-          navigate("/");
+          const initialData = {
+            store: {
+              name,
+              email,
+              presentations: [],
+            },
+          };
+          console.log("set new user data" + initialData.store.name + " and " + initialData.store.email);
+          setData(initialData);
         }
       })
       .catch((error) => {

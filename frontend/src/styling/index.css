@@ -45,9 +45,9 @@ input[type='button'] {
   border: none;
   background: cornflowerblue;
   color: white;
-  padding: 12px 24px;
+  padding: 8px 16px;
   margin: 8px;
-  font-size: 24px;
+  font-size: 1.2em;
   border-radius: 8px;
   cursor: pointer;
 }

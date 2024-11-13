@@ -1,0 +1,63 @@
+.mainContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Full height of the viewport */
+    width: 100vw; /* Full width of the viewport */
+  }
+  
+  .topBar {
+    width: 100vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #f1f1f1;
+    border-bottom: 1px solid #ddd;
+    position: sticky;
+    top: 0; /* Stick the top bar to the top */
+    z-index: 1000; /* Ensure the top bar stays on top of the content */
+  }
+  
+  .topBar img {
+    height: auto;
+    max-height: 60px;
+  }
+  
+  .userInfo {
+    font-size: 1em;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .actions {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .createPresentationButton,
+  .inputButton {
+    padding: 8px 12px;
+    font-size: 1em;
+    cursor: pointer;
+  }
+  
+  .contentArea {
+    width: 95vw;
+    height: auto;
+    background-color: lightslategray;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 equal-width columns */
+    grid-auto-rows: min-content; /* Ensure rows are only as tall as their content */
+    gap: 10px; /* Space between items */
+    padding: 10px;
+    overflow-y: auto;
+    flex-grow: 1; /* Allow the content to take the remaining space */
+  }
+  
+  .contentArea > div {
+    background-color: #f1f1f1; /* Light grey background for items */
+    padding: 20px 10px;
+    border: 1px solid #ddd;
+    aspect-ratio: 2 / 1;
+    min-width: 100px;
+  }
