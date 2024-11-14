@@ -1,77 +1,82 @@
-userData = 
 {
   "store": {
-    "name": string,
-    "email": string,
+    "name": "string",
+    "email": "string",
     "presentations": [
       {
-        "id": int,
-        "name": string,
-        "description": string,
-        "thumbnail": File,
+        "id": "int",
+        "name": "string",
+        "description": "string",
+        "thumbnail": "File",
         "default-background": {
-          "colour": string, // Hex
-          "img": File,
+          "colour": "string", // Hex
+          "img": "File"
         },
         "slides": [
           {
             "background-style": {
-              "colour": string, // Hex
-              "img": File,
+              "colour": "string", // Hex
+              "img": "File"
             },
-            "elements": [
+            "text-elements": [
               {
-                "type": "text",
+                "layer": "int",
                 "position": {
-                  "x": int, // or string for responsive design (e.g., "10%")
-                  "y": int,
+                  "x": "int",
+                  "y": "int"
                 },
                 "size": {
-                  "width": int,
-                  "height": int,
+                  "width": "int",
+                  "height": "int"
                 },
-                "content": string,
-                "font-size": int,
-                "colour": string, // Hex
-              },
+                "content": "string",
+                "font-size": "int",
+                "colour": "string" // Hex
+              }
+            ],
+            "image-elements": [
               {
-                "type": "image",
+                "layer": "int",
                 "position": {
-                  "x": int,
-                  "y": int,
+                  "x": "int",
+                  "y": "int"
                 },
                 "size": {
-                  "width": int,
-                  "height": int,
+                  "width": "int",
+                  "height": "int"
                 },
-                "file": File,
-                "alt-tag": string,
-              },
+                "file": "File",
+                "alt-tag": "string"
+              }
+            ],
+            "video-elements": [
               {
-                "type": "video",
+                "layer": "int",
                 "position": {
-                  "x": int,
-                  "y": int,
+                  "x": "int",
+                  "y": "int"
                 },
                 "size": {
-                  "width": int,
-                  "height": int,
+                  "width": "int",
+                  "height": "int"
                 },
-                "url": string,
-                "autoplay": bool, // optional
-              },
+                "url": "string",
+                "autoplay": "bool" // optional
+              }
+            ],
+            "code-elements": [
               {
-                "type": "code",
+                "layer": "int",
                 "position": {
-                  "x": int,
-                  "y": int,
+                  "x": "int",
+                  "y": "int"
                 },
                 "size": {
-                  "width": int,
-                  "height": int,
+                  "width": "int",
+                  "height": "int"
                 },
-                "font-size": int,
-                "language": string, // optional, e.g., "javascript", "python"
+                "font-size": "int",
+                "language": "string" // optional, e.g., "javascript", "python"
               }
             ]
           }

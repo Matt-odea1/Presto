@@ -178,7 +178,9 @@ const Slide = ({ setLoggedIn }) => {
           )}
           
           <div className="slideEditor">
-            {/* Render slide editor content here */}
+          <div className="slideNumber">
+            {presentation.slides.length === 1 ? '1' : activeSlideIndex + 1}
+          </div>
           </div>
           <button className="deleteButton" onClick={handleDeleteSlide}>Delete Slide</button>
         </div>
