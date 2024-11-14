@@ -14,7 +14,6 @@ import CodeIcon from '../assets/code-icon.svg';
 import leftArrow from '../assets/left-arrow.svg';
 import rightArrow from '../assets/right-arrow.svg';
 
-
 const Slide = ({ setLoggedIn }) => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -23,7 +22,6 @@ const Slide = ({ setLoggedIn }) => {
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [showChangeThumbnail, setShowChangeThumbnail] = useState(false);
-
 
   useEffect(() => {
     const fetchPresentationData = async () => {
@@ -40,6 +38,22 @@ const Slide = ({ setLoggedIn }) => {
 
     fetchPresentationData();
   }, [id]);
+
+  useEffect(() => {
+    const handleKeyPress = (event) => {
+      if (event.key === 'ArrowLeft') {
+        setActiveSlideIndex((prevIndex) => Math.max(prevIndex - 1, 0));
+      } else if (event.key === 'ArrowRight') {
+        setActiveSlideIndex((prevIndex) => Math.min(prevIndex + 1, presentation.slides.length - 1));
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    // Clean up the event listener on component unmount
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [presentation]);
 
   const handleAddSlide = () => {
     setPresentation((prev) => {
@@ -121,7 +135,7 @@ const Slide = ({ setLoggedIn }) => {
       };
       return updatedPresentation;
     });
-  
+
     const saveThumbnailToData = async () => {
       try {
         const data = await getData();
@@ -146,7 +160,7 @@ const Slide = ({ setLoggedIn }) => {
         console.error("Error updating thumbnail:", error);
       }
     };
-  
+
     saveThumbnailToData();
   };
 
