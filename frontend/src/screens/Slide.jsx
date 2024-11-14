@@ -5,6 +5,7 @@ import Sidebar from '../components/Sidebar';
 import LogoutButton from '../components/Logout';
 import ChangeThumbnail from '../components/changeThumbnail';
 import DeletePresentation from '../components/deletePresentation';
+import EditPosition from '../components/editPosition';
 import AddText from '../components/AddText';
 import Text from '../components/text';
 import '../styling/Slide.css';
@@ -25,11 +26,15 @@ const Slide = ({ setLoggedIn }) => {
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [showChangeThumbnail, setShowChangeThumbnail] = useState(false);
   const [showAddText, setShowAddText] = useState(false);
+  const [showEditPosition, setShowEditPosition] = useState(false);
+  const [currentElement, setCurrentElement] = useState(null);
+  const [clickCount, setClickCount] = useState(0);
+
 
     // HANDLING KEY PRESSES
     useEffect(() => {
       const handleKeyPress = (event) => {
-        if (presentation && !showDeletePopup && !showChangeThumbnail && !showAddText) {
+        if (presentation && !showDeletePopup && !showChangeThumbnail && !showAddText && !showEditPosition) {
           if (event.key === 'ArrowLeft') {
             setActiveSlideIndex((prevIndex) => Math.max(prevIndex - 1, 0));
           } else if (event.key === 'ArrowRight') {
@@ -44,8 +49,20 @@ const Slide = ({ setLoggedIn }) => {
       return () => {
         window.removeEventListener('keydown', handleKeyPress);
       };
-    }, [presentation, activeSlideIndex, showDeletePopup, showChangeThumbnail, showAddText]);  
+    }, [presentation, activeSlideIndex, showDeletePopup, showChangeThumbnail, showAddText, showEditPosition]);  
 
+    // HANDLING DOUBLE CLICK
+    const handleClick = (element) => {
+      setClickCount((prev) => prev + 1);
+      console.log(clickCount);
+      setTimeout(() => {
+        if (clickCount === 1) {
+          handleElementDoubleClick(element);
+          console.log("I double clicked the element");
+        }
+        setClickCount(0);
+      }, 800); // Adjust the time threshold as needed
+    };
 
   // FETCH DATA
   useEffect(() => {
@@ -140,6 +157,12 @@ const Slide = ({ setLoggedIn }) => {
     setActiveSlideIndex((prevIndex) => Math.min(prevIndex + 1, presentation.slides.length - 1));
   };
 
+  const handleElementDoubleClick = (element) => {
+    console.log("I doubled clicked the element!");
+    setCurrentElement(element);
+    setShowEditPosition(true);
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -216,7 +239,6 @@ const Slide = ({ setLoggedIn }) => {
                 <div className="slideContent">
                     {presentation.slides[activeSlideIndex]?.textElements?.map((element, index) => {
                       if (element.type === 'text') {
-                        console.log(element)
                         return (
                           <Text
                             key={index}
@@ -226,6 +248,7 @@ const Slide = ({ setLoggedIn }) => {
                             fontSize={element['font-size']}
                             color={element.colour}
                             position={element.position}
+                            onClick={(e) => { handleClick(element); }} // Check if this fires
                           />
                         );
                       }
@@ -264,6 +287,29 @@ const Slide = ({ setLoggedIn }) => {
 
             // Now save the updated presentation with the new slides
             savePresentationData({ ...presentation, slides: updatedSlides });
+          }}
+        />
+      )}
+
+      {showEditPosition && currentElement && (
+        <EditPosition
+          element={currentElement}
+          onSavePosition={(updatedElement) => {
+            const updatedSlides = [...presentation.slides];
+            const slide = updatedSlides[activeSlideIndex];
+
+            // Update the position of the specific text element within the active slide
+            const updatedTextElements = slide.textElements.map((el) =>
+              el.id === updatedElement.id ? updatedElement : el
+            );
+
+            updatedSlides[activeSlideIndex] = {
+              ...slide,
+              textElements: updatedTextElements,
+            };
+
+            savePresentationData({ ...presentation, slides: updatedSlides });
+            setShowEditPosition(false);
           }}
         />
       )}

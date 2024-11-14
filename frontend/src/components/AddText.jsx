@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import '../styling/Create.css'
 
 const AddText = ({ onClose, onSave }) => {
   const [width, setWidth] = useState(50);

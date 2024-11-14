@@ -1,10 +1,10 @@
-const Text = ({ content, width, height, fontSize, color, position }) => {
+const Text = ({ content, width, height, fontSize, color, position, onClick }) => {
     const textStyle = {
-      position: 'absolute', 
+      position: 'absolute',
       width: `${width}px`,
       height: `${height}px`,
-      left: `${position?.x}px`,
-      top: `${position?.y}px`,
+      left: `${position?.x}%`,
+      top: `${position?.y}%`,
       fontSize: `${fontSize}px`,
       color: color,
       whiteSpace: 'pre-wrap',
@@ -13,7 +13,11 @@ const Text = ({ content, width, height, fontSize, color, position }) => {
       overflow: 'hidden',
     };
   
-    return <div style={textStyle}>{content}</div>;
+    return (
+      <div style={textStyle} onClick={onClick}>
+        {content}
+      </div>
+    );
   };
   
   export default Text;

@@ -9,18 +9,34 @@ const EditPosition = ({ element, onSavePosition }) => {
   };
 
   return (
-    <div className="modal-content">
-      <h2>Edit Position</h2>
-      <label>
-        X Position (%):
-        <input type="number" value={x} onChange={(e) => setX(e.target.value)} min="0" max="100" />
-      </label>
-      <label>
-        Y Position (%):
-        <input type="number" value={y} onChange={(e) => setY(e.target.value)} min="0" max="100" />
-      </label>
-      <button onClick={handleSave}>Save</button>
-      <button onClick={() => onSavePosition(null)}>Cancel</button>
+    <div className="modalBackground">
+      <div className="modalContent">
+        <h2>Edit Position</h2>
+        <label>
+          X Position (%):
+          <input
+            type="number"
+            value={x}
+            onChange={(e) => setX(Number(e.target.value))}
+            min="0"
+            max="100"
+          />
+        </label>
+        <label>
+          Y Position (%):
+          <input
+            type="number"
+            value={y}
+            onChange={(e) => setY(Number(e.target.value))}
+            min="0"
+            max="100"
+          />
+        </label>
+        <div className="modalActions">
+          <button onClick={handleSave}>Save</button>
+          <button onClick={() => onSavePosition(null)}>Cancel</button>
+        </div>
+      </div>
     </div>
   );
 };
