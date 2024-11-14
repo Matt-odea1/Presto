@@ -5,7 +5,8 @@ import Sidebar from '../components/Sidebar';
 import LogoutButton from '../components/Logout';
 import ChangeThumbnail from '../components/changeThumbnail';
 import DeletePresentation from '../components/deletePresentation';
-import AddText from '../components/text';
+import AddText from '../components/AddText';
+import Text from '../components/text';
 import '../styling/Slide.css';
 
 import TextIcon from '../assets/text-icon.svg';
@@ -72,15 +73,14 @@ const Slide = ({ setLoggedIn }) => {
         ...data,
         store: {
           ...data.store,
-          presentations: data.store.presentations.map((pres) => {
-            if (pres.id === updatedPresentation.id) {
-              return updatedPresentation;
-            }
-            return pres;
-          }),
+          presentations: data.store.presentations.map((pres) => 
+            pres.id === updatedPresentation.id ? updatedPresentation : pres
+          ),
         },
       };
+
       await setData(updatedData);
+      setPresentation(updatedPresentation);
     } catch (error) {
       console.error("Error updating presentation data:", error);
     }
@@ -91,23 +91,25 @@ const Slide = ({ setLoggedIn }) => {
     const newSlide = {
       id: Date.now(),
       backgroundStyle: {
-        colour: '#ffffff', 
-        img: undefined, 
+        colour: '#ffffff',
+        img: undefined,
       },
       textElements: [],
       imageElements: [],
       videoElements: [],
       codeElements: [],
     };
-    setPresentation((prev) => {
-      const updatedSlides = [...prev.slides, newSlide];
-      const updatedPresentation = {
-        ...prev,
-        slides: updatedSlides,
-      };
-      savePresentationData(updatedPresentation);
-      return updatedPresentation;
-    });
+    const updatedPresentation = {
+      ...presentation,
+      slides: [...presentation.slides, newSlide],
+    };
+  
+    try {
+      await savePresentationData(updatedPresentation);
+      setPresentation(updatedPresentation);
+    } catch (error) {
+      console.error("Error saving new slide:", error);
+    }
   };
   
 
@@ -208,20 +210,32 @@ const Slide = ({ setLoggedIn }) => {
 
               <div className="slideEditor">
                 <div className="slideNumber">
-                  {presentation.slides.length === 1 ? '1' : activeSlideIndex + 1}
+                  {presentation.slides.length === 1 ? '1' : activeSlideIndex + 1}         
                 </div>
+                {/* Render elements for the active slide */}
+                <div className="slideContent">
+                    {presentation.slides[activeSlideIndex]?.textElements?.map((element, index) => {
+                      if (element.type === 'text') {
+                        console.log(element)
+                        return (
+                          <Text
+                            key={index}
+                            width={element.size.width}
+                            height={element.size.height}
+                            content={element.content}
+                            fontSize={element['font-size']}
+                            color={element.colour}
+                            position={element.position}
+                          />
+                        );
+                      }
+                      return null; // Don't render anything for non-text elements
+                    })}
+                  </div>                         
               </div>
               <button className="deleteButton" onClick={handleDeleteSlide}>Delete Slide</button>
 
-              {/* Render elements for the active slide */}
-              <div className="slideContent">
-                {presentation.slides[activeSlideIndex].elements?.map((element, index) => {
-                  if (element.type === 'text') {
-                    return <Text key={index} content={element.content} />;
-                  }
-                  return null;
-                })}
-              </div>
+
             </>
           ) : (
             <div className='SlideEditor'></div> // Blank template when no slides
