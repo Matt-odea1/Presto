@@ -61,7 +61,7 @@ const Slide = ({ setLoggedIn }) => {
           console.log("I double clicked the element");
         }
         setClickCount(0);
-      }, 800); // Adjust the time threshold as needed
+      }, 500); // Adjust the time threshold as needed
     };
 
   // FETCH DATA
