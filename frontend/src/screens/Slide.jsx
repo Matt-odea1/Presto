@@ -101,9 +101,8 @@ const Slide = ({ setLoggedIn }) => {
     } else {
       setActiveSlideIndex(Math.max(activeSlideIndex - 1, 0));
     }
-      await savePresentationData(updatedPresentation);
-      setPresentation(updatedPresentation);
-
+    await savePresentationData(updatedPresentation);
+    setPresentation(updatedPresentation);
   };
 
   const handlePreviousSlide = () => {
@@ -178,9 +177,9 @@ const Slide = ({ setLoggedIn }) => {
           )}
           
           <div className="slideEditor">
-          <div className="slideNumber">
-            {presentation.slides.length === 1 ? '1' : activeSlideIndex + 1}
-          </div>
+            <div className="slideNumber">
+              {presentation.slides.length === 1 ? '1' : activeSlideIndex + 1}
+            </div>
           </div>
           <button className="deleteButton" onClick={handleDeleteSlide}>Delete Slide</button>
         </div>

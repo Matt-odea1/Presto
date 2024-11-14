@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const ChangeThumbnail = ({ onClose, onSave }) => {
   const [thumbnailFile, setThumbnailFile] = useState(null);
