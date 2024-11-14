@@ -4,7 +4,6 @@
     background-color: #f7f9fc;
   }
 
-  /* Top Bar */
 .topBar {
     height: 10vh;
     display: flex;
@@ -15,13 +14,11 @@
     border-bottom: 1px solid #dcdcdc;
   }
   
-  /* Left Section - Logout Button */
   .leftSection {
     display: flex;
     align-items: center;
   }
   
-  /* Center Section - Icons */
 .centerSection {
     display: flex;
     gap: 1rem;
@@ -35,7 +32,6 @@
     fill: #333;
   }
   
-  /* Right Section - Buttons and Title */
   .rightSection {
     display: flex;
     align-items: center;

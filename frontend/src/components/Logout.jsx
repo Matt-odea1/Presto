@@ -19,11 +19,9 @@ const LogoutButton = ({ setLoggedIn }) => {
           }
         )
         .then(() => {
-          // Remove the token and update the logged-in state
           localStorage.removeItem('authToken');
           setLoggedIn(false);
-
-          // Navigate to the home page
+          console.log("trying to navigate");
           navigate('/');
         })
         .catch((error) => {
