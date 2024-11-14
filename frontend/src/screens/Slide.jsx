@@ -29,6 +29,7 @@ const Slide = ({ setLoggedIn }) => {
   const [showChangeThumbnail, setShowChangeThumbnail] = useState(false);
   const [showAddText, setShowAddText] = useState(false);
   const [showAddImage, setShowAddImage] = useState(false); 
+  const [showAddVideo, setShowAddVideo] = useState(false);
   const [showEditPosition, setShowEditPosition] = useState(false);
   const [currentElement, setCurrentElement] = useState(null);
   const [clickCount, setClickCount] = useState(0);
