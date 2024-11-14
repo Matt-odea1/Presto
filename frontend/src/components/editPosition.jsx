@@ -35,7 +35,6 @@ const EditPosition = ({ element, onSavePosition }) => {
         </label>
         <div className="modalActions">
           <button onClick={handleSave}>Save</button>
-          <button onClick={() => onSavePosition(null)}>Cancel</button>
         </div>
       </div>
     </div>

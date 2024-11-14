@@ -49,6 +49,8 @@ const AddVideo = ({ onClose, onSave }) => {
           </label>
           <label>
             YouTube Video URL:
+            Make sure this is an embed link!
+            eg. https://www.youtube.com/embed/... 
             <input
               type="url"
               value={videoUrl}

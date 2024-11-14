@@ -56,7 +56,8 @@ const Slide = ({ setLoggedIn }) => {
     };
   }, [presentation, activeSlideIndex, showDeletePopup, showChangeThumbnail, showAddText, showEditPosition, showAddImage, showAddVideo]);
 
-  // HANDLE DOUBLE CLICK
+  // HANDLE DOUBLE CLICK;
+  console.log("click");
   const handleClick = (element) => {
     setClickCount((prev) => prev + 1);
     setTimeout(() => {
