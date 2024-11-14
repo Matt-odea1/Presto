@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { getData, setData, useCustomNavigation } from '../components/Router';
 import Sidebar from '../components/Sidebar';
 import LogoutButton from '../components/Logout';
@@ -12,10 +12,10 @@ import CodeIcon from '../assets/code-icon.svg';
 
 const Slide = ({ setLoggedIn }) => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [presentation, setPresentation] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
-  const { navigateToSlideDeck } = useCustomNavigation();
 
   useEffect(() => {
     const fetchPresentationData = async () => {
@@ -51,41 +51,40 @@ const Slide = ({ setLoggedIn }) => {
   const handleSaveContent = async () => {
     try {
       const data = await getData();
-      // Create a new object for the data to be sent
       const updatedPresentation = {
-        ...presentation, // Spread existing presentation data
+        ...presentation,
         slides: presentation.slides.map((slide, index) => {
-          // Update the slide content at the active index
           if (index === activeSlideIndex) {
             return {
               ...slide,
-              content: presentation.slides[activeSlideIndex].content, // Only update the content of the active slide
+              content: presentation.slides[activeSlideIndex].content,
             };
           }
-          return slide; // Keep other slides unchanged
+          return slide;
         }),
       };
-  
-      // Create the final data to update, preserving the rest of the data structure
+
       const updatedData = {
         store: {
           ...data.store,
           presentations: data.store.presentations.map((pres) => {
-            // Find the presentation being edited and update it
             if (pres.id === presentation.id) {
-              return updatedPresentation; // Replace only the updated presentation
+              return updatedPresentation;
             }
-            return pres; // Keep other presentations unchanged
+            return pres;
           }),
         },
       };
-  
-      // Send the updated data to the server using setData
+
       const result = await setData(updatedData);
       console.log('Data successfully updated:', result);
     } catch (error) {
       console.error('Error saving data:', error);
     }
+  };
+
+  const handleBackToDashboard = () => {
+    navigate('/dashboard');
   };
 
   if (loading) {
@@ -97,7 +96,10 @@ const Slide = ({ setLoggedIn }) => {
       {/* Top Bar */}
       <div className="topBar">
         <div className="leftSection">
-          <LogoutButton setLoggedIn={setLoggedIn} /> {/* Ensure this works to log out and navigate */}
+          <div className='stack'>
+            <LogoutButton setLoggedIn={setLoggedIn} />
+            <button className="topButton" onClick={handleBackToDashboard}>Back</button> {/* Back button */}
+          </div>
         </div>
         <div className="centerSection">
           <img className="topIcon" src={TextIcon} alt="Text Icon" />
@@ -116,7 +118,6 @@ const Slide = ({ setLoggedIn }) => {
 
       {/* Content Section */}
       <div className="slideContainer">
-        {/* Sidebar on the left */}
         <Sidebar
           slides={presentation.slides}
           activeSlideIndex={activeSlideIndex}
@@ -124,7 +125,6 @@ const Slide = ({ setLoggedIn }) => {
           addNewSlide={handleAddSlide}
         />
 
-        {/* Slide editing area on the right */}
         <div className="mainContent">
           <div className="slideEditor">
             {presentation.slides.length > 0 && (
@@ -137,7 +137,7 @@ const Slide = ({ setLoggedIn }) => {
               </div>
             )}
           </div>
-          <button onClick={handleSaveContent}>Save Presentation</button> {/* Save button to trigger the save */}
+          <button onClick={handleSaveContent}>Save Presentation</button>
         </div>
       </div>
     </div>

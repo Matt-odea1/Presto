@@ -40,7 +40,7 @@ const LogoutButton = ({ setLoggedIn }) => {
       className="inputButton"
       type="button"
       onClick={onLogoutClick}
-      value="Log out"
+      value="Logout"
     />
   );
 };
