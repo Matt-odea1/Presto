@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import '../styling/Slide.css'
 
 const LogoutButton = ({ setLoggedIn }) => {
   const navigate = useNavigate();
@@ -37,7 +38,7 @@ const LogoutButton = ({ setLoggedIn }) => {
 
   return (
     <input
-      className="inputButton"
+      className="topButton"
       type="button"
       onClick={onLogoutClick}
       value="Logout"

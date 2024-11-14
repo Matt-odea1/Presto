@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getData, setData, useCustomNavigation } from '../components/Router';
+import { getData, setData } from '../components/Router';
 import Sidebar from '../components/Sidebar';
 import LogoutButton from '../components/Logout';
 import ChangeThumbnail from '../components/changeThumbnail';
@@ -26,7 +26,7 @@ const Slide = ({ setLoggedIn }) => {
   useEffect(() => {
     const fetchPresentationData = async () => {
       try {
-        const data = await getData(); // Fetch the data using getData
+        const data = await getData();
         const presentation = data.store.presentations.find(p => p.id === parseInt(id));
         setPresentation(presentation);
       } catch (error) {
@@ -45,128 +45,81 @@ const Slide = ({ setLoggedIn }) => {
         setActiveSlideIndex((prevIndex) => Math.max(prevIndex - 1, 0));
       } else if (event.key === 'ArrowRight') {
         setActiveSlideIndex((prevIndex) => Math.min(prevIndex + 1, presentation.slides.length - 1));
+      } else if (event.key === 'Delete' || event.key === 'Backspace') {
+        handleDeleteSlide();
       }
     };
 
     window.addEventListener('keydown', handleKeyPress);
-    // Clean up the event listener on component unmount
     return () => {
       window.removeEventListener('keydown', handleKeyPress);
     };
-  }, [presentation]);
+  }, [presentation, activeSlideIndex]);
 
-  const handleAddSlide = () => {
-    setPresentation((prev) => {
-      const updatedSlides = [...prev.slides, { id: Date.now(), content: '' }];
-      return { ...prev, slides: updatedSlides };
-    });
-  };
-
-  const handleSlideChange = (index, content) => {
-    setPresentation((prev) => {
-      const updatedSlides = [...prev.slides];
-      updatedSlides[index].content = content;
-      return { ...prev, slides: updatedSlides };
-    });
-  };
-
-  const handleSaveContent = async () => {
+  const savePresentationData = async (updatedPresentation) => {
     try {
       const data = await getData();
-      const updatedPresentation = {
-        ...presentation,
-        slides: presentation.slides.map((slide, index) => {
-          if (index === activeSlideIndex) {
-            return {
-              ...slide,
-              content: presentation.slides[activeSlideIndex].content,
-            };
-          }
-          return slide;
-        }),
-      };
-
       const updatedData = {
+        ...data,
         store: {
           ...data.store,
           presentations: data.store.presentations.map((pres) => {
-            if (pres.id === presentation.id) {
+            if (pres.id === updatedPresentation.id) {
               return updatedPresentation;
             }
             return pres;
           }),
         },
       };
-
-      const result = await setData(updatedData);
-      console.log('Data successfully updated:', result);
+      await setData(updatedData);
     } catch (error) {
-      console.error('Error saving data:', error);
+      console.error("Error updating presentation data:", error);
     }
   };
 
-  const handleBackToDashboard = () => {
-    navigate('/dashboard');
-  };
-
-  const handleDeletePresentation = () => {
-    setShowDeletePopup(true);
-  };
-
-  const handleCancelDelete = () => {
-    setShowDeletePopup(false);
-  };
-
-  const handleChangeThumbnail = () => {
-    setShowChangeThumbnail(true);
-  };
-
-  const handleCloseThumbnailModal = () => {
-    setShowChangeThumbnail(false);
-  };
-
-  const handleSaveThumbnail = (file) => {
-    console.log("saving");
-    const fileUrl = URL.createObjectURL(file);
+  const handleAddSlide = async () => {
     setPresentation((prev) => {
-      const updatedPresentation = {
-        ...prev,
-        thumbnail: file,
-      };
-      return updatedPresentation;
+      const updatedSlides = [...prev.slides, { id: Date.now(), content: '' }];
+      return { ...prev, slides: updatedSlides };
     });
-
-    const saveThumbnailToData = async () => {
-      try {
-        const data = await getData();
-        const updatedData = {
-          ...data,
-          store: {
-            ...data.store,
-            presentations: data.store.presentations.map((pres) => {
-              if (pres.id === presentation.id) {
-                return {
-                  ...pres,
-                  thumbnail: fileUrl,
-                };
-              }
-              return pres;
-            }),
-          },
-        };
-        await setData(updatedData);
-        console.log("Thumbnail updated successfully.");
-      } catch (error) {
-        console.error("Error updating thumbnail:", error);
-      }
+    const updatedPresentation = {
+      ...presentation,
+      slides: [...presentation.slides, { id: Date.now(), content: '' }],
     };
+    await savePresentationData(updatedPresentation);
+  };
 
-    saveThumbnailToData();
+  const handleDeleteSlide = async () => {
+    const updatedSlides = presentation.slides.filter((slide, index) => index !== activeSlideIndex);
+    const updatedPresentation = {
+      ...presentation,
+      slides: updatedSlides,
+    };
+  
+    if (activeSlideIndex === updatedSlides.length) {
+      setActiveSlideIndex(updatedSlides.length - 1);
+    } else {
+      setActiveSlideIndex(Math.max(activeSlideIndex - 1, 0));
+    }
+      await savePresentationData(updatedPresentation);
+      setPresentation(updatedPresentation);
+
+  };
+
+  const handlePreviousSlide = () => {
+    setActiveSlideIndex((prevIndex) => Math.max(prevIndex - 1, 0));
+  };
+
+  const handleNextSlide = () => {
+    setActiveSlideIndex((prevIndex) => Math.min(prevIndex + 1, presentation.slides.length - 1));
   };
 
   if (loading) {
     return <div>Loading...</div>;
   }
+
+  const isFirstSlide = activeSlideIndex === 0;
+  const isLastSlide = activeSlideIndex === presentation.slides.length - 1;
 
   return (
     <div className="content-container">
@@ -175,7 +128,7 @@ const Slide = ({ setLoggedIn }) => {
         <div className="leftSection">
           <div className='stack'>
             <LogoutButton setLoggedIn={setLoggedIn} />
-            <button className="topButton" onClick={handleBackToDashboard}>Back</button> {/* Back button */}
+            <button className="topButton" onClick={() => navigate('/dashboard')}>&nbsp;&nbsp;Back&nbsp;&nbsp;</button> {/* Back button */}
           </div>
         </div>
         <div className="centerSection">
@@ -186,10 +139,10 @@ const Slide = ({ setLoggedIn }) => {
         </div>
         <div className="rightSection">
           <h2 className="slideTitle">{presentation.name}</h2>
-          <img classname="topIcon" src={presentation.thumbnail} />
+          <img className="topIcon" src={presentation.thumbnail} />
           <div className="stack">
-            <button className="topButton" onClick={handleChangeThumbnail}>Change Thumbnail</button>
-            <button className="topButton" onClick={handleDeletePresentation}>Delete Presentation</button>
+            <button className="topButton" onClick={() => setShowChangeThumbnail(true)}>Change Thumbnail</button>
+            <button className="topButton" onClick={() => setShowDeletePopup(true)}>Delete Presentation</button>
           </div>
         </div>
       </div>
@@ -204,29 +157,40 @@ const Slide = ({ setLoggedIn }) => {
         />
 
         <div className="mainContent">
-          <div className='arrowDiv'>
-            <img className="topIcon" src={leftArrow} alt="Prev Slide"/>
-            <img className="topIcon" src={rightArrow} alt="Next Slide"/>
-          </div>
+          {/* Only show arrows if there are at least two slides */}
+          {presentation.slides.length > 1 && (
+            <div className='arrowDiv'>
+              <img 
+                className={`topIcon ${isFirstSlide ? 'disabled' : ''}`} 
+                src={leftArrow} 
+                alt="Prev Slide" 
+                onClick={handlePreviousSlide} 
+                disabled={isFirstSlide}
+              />
+              <img 
+                className={`topIcon ${isLastSlide ? 'disabled' : ''}`} 
+                src={rightArrow} 
+                alt="Next Slide" 
+                onClick={handleNextSlide} 
+                disabled={isLastSlide}
+              />
+            </div>
+          )}
+          
           <div className="slideEditor">
+            {/* Render slide editor content here */}
           </div>
+          <button className="deleteButton" onClick={handleDeleteSlide}>Delete Slide</button>
         </div>
       </div>
 
-      {/* Conditionally render DeletePresentation component */}
+      {/* Conditionally render modals */}
       {showDeletePopup && (
-        <DeletePresentation
-          presentationId={presentation.id}
-          onCancel={handleCancelDelete}
-        />
+        <DeletePresentation presentationId={presentation.id} onCancel={() => setShowDeletePopup(false)} />
       )}
 
-      {/* Conditionally render ChangeThumbnail modal */}
       {showChangeThumbnail && (
-        <ChangeThumbnail
-          onClose={handleCloseThumbnailModal}
-          onSave={handleSaveThumbnail}
-        />
+        <ChangeThumbnail onClose={() => setShowChangeThumbnail(false)} onSave={(file) => savePresentationData({ ...presentation, thumbnail: file })} />
       )}
     </div>
   );
