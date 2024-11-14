@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { getData, setData, useCustomNavigation } from '../components/Router';
 import Sidebar from '../components/Sidebar';
 import LogoutButton from '../components/Logout';
+import DeletePresentation from '../components/deletePresentation';
 import '../styling/Slide.css';
 
 import TextIcon from '../assets/text-icon.svg';
@@ -16,6 +17,8 @@ const Slide = ({ setLoggedIn }) => {
   const [presentation, setPresentation] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
+
 
   useEffect(() => {
     const fetchPresentationData = async () => {
@@ -87,6 +90,14 @@ const Slide = ({ setLoggedIn }) => {
     navigate('/dashboard');
   };
 
+  const handleDeletePresentation = () => {
+    setShowDeletePopup(true); // Show delete popup when clicked
+  };
+
+  const handleCancelDelete = () => {
+    setShowDeletePopup(false); // Hide popup without deleting
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -111,7 +122,7 @@ const Slide = ({ setLoggedIn }) => {
           <h2 className="slideTitle">{presentation.name}</h2>
           <div className="stack">
             <button className="topButton">Change Thumbnail</button>
-            <button className="topButton">Delete Presentation</button>
+            <button className="topButton" onClick={handleDeletePresentation}>Delete Presentation</button>
           </div>
         </div>
       </div>
@@ -127,19 +138,17 @@ const Slide = ({ setLoggedIn }) => {
 
         <div className="mainContent">
           <div className="slideEditor">
-            {presentation.slides.length > 0 && (
-              <div className="slideItem">
-                <textarea
-                  value={presentation.slides[activeSlideIndex].content}
-                  onChange={(e) => handleSlideChange(activeSlideIndex, e.target.value)}
-                  placeholder="Enter slide content"
-                />
-              </div>
-            )}
           </div>
-          <button onClick={handleSaveContent}>Save Presentation</button>
         </div>
       </div>
+
+      {/* Conditionally render DeletePresentation component */}
+      {showDeletePopup && (
+        <DeletePresentation
+          presentationId={presentation.id}
+          onCancel={handleCancelDelete}
+        />
+      )}
     </div>
   );
 };
