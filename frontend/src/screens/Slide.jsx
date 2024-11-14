@@ -7,7 +7,9 @@ import ChangeThumbnail from '../components/changeThumbnail';
 import DeletePresentation from '../components/deletePresentation';
 import EditPosition from '../components/editPosition';
 import AddText from '../components/AddText';
+import AddImage from '../components/AddImage';
 import Text from '../components/text';
+import Image from '../components/image';
 import '../styling/Slide.css';
 
 import TextIcon from '../assets/text-icon.svg';
@@ -26,6 +28,7 @@ const Slide = ({ setLoggedIn }) => {
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [showChangeThumbnail, setShowChangeThumbnail] = useState(false);
   const [showAddText, setShowAddText] = useState(false);
+  const [showAddImage, setShowAddImage] = useState(false); 
   const [showEditPosition, setShowEditPosition] = useState(false);
   const [currentElement, setCurrentElement] = useState(null);
   const [clickCount, setClickCount] = useState(0);
@@ -34,7 +37,7 @@ const Slide = ({ setLoggedIn }) => {
     // HANDLING KEY PRESSES
     useEffect(() => {
       const handleKeyPress = (event) => {
-        if (presentation && !showDeletePopup && !showChangeThumbnail && !showAddText && !showEditPosition) {
+        if (presentation && !showDeletePopup && !showChangeThumbnail && !showAddText && !showEditPosition && !showAddImage) {
           if (event.key === 'ArrowLeft') {
             setActiveSlideIndex((prevIndex) => Math.max(prevIndex - 1, 0));
           } else if (event.key === 'ArrowRight') {
@@ -49,12 +52,12 @@ const Slide = ({ setLoggedIn }) => {
       return () => {
         window.removeEventListener('keydown', handleKeyPress);
       };
-    }, [presentation, activeSlideIndex, showDeletePopup, showChangeThumbnail, showAddText, showEditPosition]);  
+    }, [presentation, activeSlideIndex, showDeletePopup, showChangeThumbnail, showAddText, showEditPosition, showAddImage]);  
 
     // HANDLING DOUBLE CLICK
     const handleClick = (element) => {
       setClickCount((prev) => prev + 1);
-      console.log(clickCount);
+      console.log(element)
       setTimeout(() => {
         if (clickCount === 1) {
           handleElementDoubleClick(element);
@@ -128,6 +131,19 @@ const Slide = ({ setLoggedIn }) => {
       console.error("Error saving new slide:", error);
     }
   };
+
+  // SAVE NEW IMAGE
+  const handleSaveImage = async (imageElement) => {
+    const updatedSlides = [...presentation.slides];
+    updatedSlides[activeSlideIndex] = {
+      ...updatedSlides[activeSlideIndex],
+      imageElements: [
+        ...(updatedSlides[activeSlideIndex].imageElements || []),
+        imageElement
+      ],
+    };
+    await savePresentationData({ ...presentation, slides: updatedSlides });
+  };
   
 
   // DELETE SLIDE
@@ -184,7 +200,7 @@ const Slide = ({ setLoggedIn }) => {
         </div>
         <div className="centerSection">
           <img className="topIcon" src={TextIcon} alt="Text Icon" onClick={() => setShowAddText(true)}/>
-          <img className="topIcon" src={ImageIcon} alt="Image Icon" />
+          <img className="topIcon" src={ImageIcon} alt="Image Icon" onClick={() => setShowAddImage(true)} />
           <img className="topIcon" src={VideoIcon} alt="Video Icon" />
           <img className="topIcon" src={CodeIcon} alt="Code Icon" />
         </div>
@@ -208,10 +224,8 @@ const Slide = ({ setLoggedIn }) => {
         />
 
         <div className="mainContent">
-          {/* Only render slide editor if there are slides */}
           {presentation.slides.length > 0 ? (
             <>
-              {/* Only show arrows if there are at least two slides */}
               {presentation.slides.length > 1 && (
                 <div className='arrowDiv'>
                   <img 
@@ -237,27 +251,43 @@ const Slide = ({ setLoggedIn }) => {
                 </div>
                 {/* Render elements for the active slide */}
                 <div className="slideContent">
-                    {presentation.slides[activeSlideIndex]?.textElements?.map((element, index) => {
-                      if (element.type === 'text') {
-                        return (
-                          <Text
-                            key={index}
-                            width={element.size.width}
-                            height={element.size.height}
-                            content={element.content}
-                            fontSize={element['font-size']}
-                            color={element.colour}
-                            position={element.position}
-                            onClick={(e) => { handleClick(element); }} // Check if this fires
-                          />
-                        );
-                      }
-                      return null; // Don't render anything for non-text elements
-                    })}
-                  </div>                         
+                  {presentation.slides[activeSlideIndex]?.textElements?.map((element, index) => {
+                    if (element.type === 'text') {
+                      return (
+                        <Text
+                          key={`text-${index}`}
+                          width={element.size.width}
+                          height={element.size.height}
+                          content={element.content}
+                          fontSize={element['font-size']}
+                          color={element.colour}
+                          position={element.position}
+                          onClick={() => handleClick(element)}
+                        />
+                      );
+                    }
+                    return null;
+                  })}
+                  
+                  {presentation.slides[activeSlideIndex]?.imageElements?.map((element, index) => {
+                    if (element.type === 'image') {
+                      return (
+                        <Image
+                          key={`image-${index}`}
+                          src={element.file}
+                          width={element.size.width}
+                          height={element.size.height}
+                          position={element.position}
+                          altTag={element['alt-tag']}
+                          onClick={() => handleClick(element)}
+                        />
+                      );
+                    }
+                    return null;
+                  })}
+                </div>                        
               </div>
               <button className="deleteButton" onClick={handleDeleteSlide}>Delete Slide</button>
-
 
             </>
           ) : (
@@ -278,16 +308,20 @@ const Slide = ({ setLoggedIn }) => {
             const updatedSlides = [...presentation.slides];
             updatedSlides[activeSlideIndex] = {
               ...updatedSlides[activeSlideIndex],
-              // Ensure textElements is always an array, default to an empty array if not present
               textElements: [
                 ...(updatedSlides[activeSlideIndex].textElements || []), 
                 textElement
               ],
             };
-
-            // Now save the updated presentation with the new slides
             savePresentationData({ ...presentation, slides: updatedSlides });
           }}
+        />
+      )}
+
+      {showAddImage && (
+        <AddImage
+          onClose={() => setShowAddImage(false)}
+          onSave={(imageElement) => handleSaveImage(imageElement)}
         />
       )}
 
@@ -298,18 +332,28 @@ const Slide = ({ setLoggedIn }) => {
             const updatedSlides = [...presentation.slides];
             const slide = updatedSlides[activeSlideIndex];
 
-            // Update the position of the specific text element within the active slide
-            const updatedTextElements = slide.textElements.map((el) =>
-              el.id === updatedElement.id ? updatedElement : el
-            );
-
-            updatedSlides[activeSlideIndex] = {
-              ...slide,
-              textElements: updatedTextElements,
+            const elementTypeMap = {
+              text: 'textElements',
+              image: 'imageElements',
+              video: 'videoElements',
+              code: 'codeElements',
             };
+
+            const elementArrayName = elementTypeMap[updatedElement.type];
+
+            if (elementArrayName) {
+              const updatedElements = slide[elementArrayName].map((el) =>
+                el.id === updatedElement.id ? updatedElement : el
+              );
+
+              updatedSlides[activeSlideIndex] = {
+                ...slide,
+                [elementArrayName]: updatedElements,
+              };
 
             savePresentationData({ ...presentation, slides: updatedSlides });
             setShowEditPosition(false);
+            }
           }}
         />
       )}

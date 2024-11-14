@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import '../styling/Create.css'
 
 const EditPosition = ({ element, onSavePosition }) => {
   const [x, setX] = useState(element.position.x);

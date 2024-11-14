@@ -25,7 +25,7 @@ const AddImage = ({ onClose, onSave }) => {
       type: 'image',
       position: { x: 0, y: 0 },
       size: { width: width, height: height },
-      file: file,
+      file: imageSrc,
       'alt-tag': altTag,
       layer: 0,
     };
