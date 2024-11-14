@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { getData, setData, useCustomNavigation } from '../components/Router';
 import Sidebar from '../components/Sidebar';
 import LogoutButton from '../components/Logout';
+import ChangeThumbnail from '../components/changeThumbnail';
 import DeletePresentation from '../components/deletePresentation';
 import '../styling/Slide.css';
 
@@ -10,6 +11,9 @@ import TextIcon from '../assets/text-icon.svg';
 import ImageIcon from '../assets/img-icon.svg';
 import VideoIcon from '../assets/video-icon.svg';
 import CodeIcon from '../assets/code-icon.svg';
+import leftArrow from '../assets/left-arrow.svg';
+import rightArrow from '../assets/right-arrow.svg';
+
 
 const Slide = ({ setLoggedIn }) => {
   const { id } = useParams();
@@ -18,6 +22,7 @@ const Slide = ({ setLoggedIn }) => {
   const [loading, setLoading] = useState(true);
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [showChangeThumbnail, setShowChangeThumbnail] = useState(false);
 
 
   useEffect(() => {
@@ -91,11 +96,58 @@ const Slide = ({ setLoggedIn }) => {
   };
 
   const handleDeletePresentation = () => {
-    setShowDeletePopup(true); // Show delete popup when clicked
+    setShowDeletePopup(true);
   };
 
   const handleCancelDelete = () => {
-    setShowDeletePopup(false); // Hide popup without deleting
+    setShowDeletePopup(false);
+  };
+
+  const handleChangeThumbnail = () => {
+    setShowChangeThumbnail(true);
+  };
+
+  const handleCloseThumbnailModal = () => {
+    setShowChangeThumbnail(false);
+  };
+
+  const handleSaveThumbnail = (file) => {
+    console.log("saving");
+    const fileUrl = URL.createObjectURL(file);
+    setPresentation((prev) => {
+      const updatedPresentation = {
+        ...prev,
+        thumbnail: file,
+      };
+      return updatedPresentation;
+    });
+  
+    const saveThumbnailToData = async () => {
+      try {
+        const data = await getData();
+        const updatedData = {
+          ...data,
+          store: {
+            ...data.store,
+            presentations: data.store.presentations.map((pres) => {
+              if (pres.id === presentation.id) {
+                return {
+                  ...pres,
+                  thumbnail: fileUrl,
+                };
+              }
+              return pres;
+            }),
+          },
+        };
+        await setData(updatedData);
+        console.log("Thumbnail updated successfully.");
+      } catch (error) {
+        console.error("Error updating thumbnail:", error);
+      }
+    };
+  
+    saveThumbnailToData();
   };
 
   if (loading) {
@@ -120,8 +172,9 @@ const Slide = ({ setLoggedIn }) => {
         </div>
         <div className="rightSection">
           <h2 className="slideTitle">{presentation.name}</h2>
+          <img classname="topIcon" src={presentation.thumbnail} />
           <div className="stack">
-            <button className="topButton">Change Thumbnail</button>
+            <button className="topButton" onClick={handleChangeThumbnail}>Change Thumbnail</button>
             <button className="topButton" onClick={handleDeletePresentation}>Delete Presentation</button>
           </div>
         </div>
@@ -137,6 +190,10 @@ const Slide = ({ setLoggedIn }) => {
         />
 
         <div className="mainContent">
+          <div className='arrowDiv'>
+            <img className="topIcon" src={leftArrow} alt="Prev Slide"/>
+            <img className="topIcon" src={rightArrow} alt="Next Slide"/>
+          </div>
           <div className="slideEditor">
           </div>
         </div>
@@ -147,6 +204,14 @@ const Slide = ({ setLoggedIn }) => {
         <DeletePresentation
           presentationId={presentation.id}
           onCancel={handleCancelDelete}
+        />
+      )}
+
+      {/* Conditionally render ChangeThumbnail modal */}
+      {showChangeThumbnail && (
+        <ChangeThumbnail
+          onClose={handleCloseThumbnailModal}
+          onSave={handleSaveThumbnail}
         />
       )}
     </div>

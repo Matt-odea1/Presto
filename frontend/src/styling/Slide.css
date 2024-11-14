@@ -65,7 +65,13 @@
     display: flex;
     background-color: #ffffff;
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .arrowDiv {
+    display: flex;
+    justify-content: space-between;
   }
     
   .slideEditor {
