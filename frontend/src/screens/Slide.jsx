@@ -8,8 +8,10 @@ import DeletePresentation from '../components/deletePresentation';
 import EditPosition from '../components/editPosition';
 import AddText from '../components/AddText';
 import AddImage from '../components/AddImage';
+import AddVideo from '../components/AddVideo'; // Import AddVideo component
 import Text from '../components/text';
 import Image from '../components/image';
+import Video from '../components/video'; // Import Video component
 import '../styling/Slide.css';
 
 import TextIcon from '../assets/text-icon.svg';
@@ -28,45 +30,42 @@ const Slide = ({ setLoggedIn }) => {
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [showChangeThumbnail, setShowChangeThumbnail] = useState(false);
   const [showAddText, setShowAddText] = useState(false);
-  const [showAddImage, setShowAddImage] = useState(false); 
-  const [showAddVideo, setShowAddVideo] = useState(false);
+  const [showAddImage, setShowAddImage] = useState(false);
+  const [showAddVideo, setShowAddVideo] = useState(false); // State to control AddVideo modal
   const [showEditPosition, setShowEditPosition] = useState(false);
   const [currentElement, setCurrentElement] = useState(null);
   const [clickCount, setClickCount] = useState(0);
 
-
-    // HANDLING KEY PRESSES
-    useEffect(() => {
-      const handleKeyPress = (event) => {
-        if (presentation && !showDeletePopup && !showChangeThumbnail && !showAddText && !showEditPosition && !showAddImage) {
-          if (event.key === 'ArrowLeft') {
-            setActiveSlideIndex((prevIndex) => Math.max(prevIndex - 1, 0));
-          } else if (event.key === 'ArrowRight') {
-            setActiveSlideIndex((prevIndex) => Math.min(prevIndex + 1, presentation.slides.length - 1));
-          } else if (event.key === 'Delete' || event.key === 'Backspace') {
-            handleDeleteSlide();
-          }
+  // HANDLE KEY PRESSES
+  useEffect(() => {
+    const handleKeyPress = (event) => {
+      if (presentation && !showDeletePopup && !showChangeThumbnail && !showAddText && !showEditPosition && !showAddImage && !showAddVideo) {
+        if (event.key === 'ArrowLeft') {
+          setActiveSlideIndex((prevIndex) => Math.max(prevIndex - 1, 0));
+        } else if (event.key === 'ArrowRight') {
+          setActiveSlideIndex((prevIndex) => Math.min(prevIndex + 1, presentation.slides.length - 1));
+        } else if (event.key === 'Delete' || event.key === 'Backspace') {
+          handleDeleteSlide();
         }
-      };
-  
-      window.addEventListener('keydown', handleKeyPress);
-      return () => {
-        window.removeEventListener('keydown', handleKeyPress);
-      };
-    }, [presentation, activeSlideIndex, showDeletePopup, showChangeThumbnail, showAddText, showEditPosition, showAddImage]);  
-
-    // HANDLING DOUBLE CLICK
-    const handleClick = (element) => {
-      setClickCount((prev) => prev + 1);
-      console.log(element)
-      setTimeout(() => {
-        if (clickCount === 1) {
-          handleElementDoubleClick(element);
-          console.log("I double clicked the element");
-        }
-        setClickCount(0);
-      }, 500); // Adjust the time threshold as needed
+      }
     };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [presentation, activeSlideIndex, showDeletePopup, showChangeThumbnail, showAddText, showEditPosition, showAddImage, showAddVideo]);
+
+  // HANDLE DOUBLE CLICK
+  const handleClick = (element) => {
+    setClickCount((prev) => prev + 1);
+    setTimeout(() => {
+      if (clickCount === 1) {
+        handleElementDoubleClick(element);
+      }
+      setClickCount(0);
+    }, 500);
+  };
 
   // FETCH DATA
   useEffect(() => {
@@ -85,7 +84,6 @@ const Slide = ({ setLoggedIn }) => {
     fetchPresentationData();
   }, [id]);
 
-
   // SAVE DATA
   const savePresentationData = async (updatedPresentation) => {
     try {
@@ -94,7 +92,7 @@ const Slide = ({ setLoggedIn }) => {
         ...data,
         store: {
           ...data.store,
-          presentations: data.store.presentations.map((pres) => 
+          presentations: data.store.presentations.map((pres) =>
             pres.id === updatedPresentation.id ? updatedPresentation : pres
           ),
         },
@@ -124,7 +122,7 @@ const Slide = ({ setLoggedIn }) => {
       ...presentation,
       slides: [...presentation.slides, newSlide],
     };
-  
+
     try {
       await savePresentationData(updatedPresentation);
       setPresentation(updatedPresentation);
@@ -140,14 +138,25 @@ const Slide = ({ setLoggedIn }) => {
       ...updatedSlides[activeSlideIndex],
       imageElements: [
         ...(updatedSlides[activeSlideIndex].imageElements || []),
-        imageElement
+        imageElement,
       ],
     };
     await savePresentationData({ ...presentation, slides: updatedSlides });
   };
-  
 
-  // DELETE SLIDE
+  // SAVE NEW VIDEO
+  const handleSaveVideo = async (videoElement) => {
+    const updatedSlides = [...presentation.slides];
+    updatedSlides[activeSlideIndex] = {
+      ...updatedSlides[activeSlideIndex],
+      videoElements: [
+        ...(updatedSlides[activeSlideIndex].videoElements || []),
+        videoElement,
+      ],
+    };
+    await savePresentationData({ ...presentation, slides: updatedSlides });
+  };
+
   const handleDeleteSlide = async () => {
     if (presentation && presentation.slides) {
       const updatedSlides = presentation.slides.filter((slide, index) => index !== activeSlideIndex);
@@ -175,7 +184,6 @@ const Slide = ({ setLoggedIn }) => {
   };
 
   const handleElementDoubleClick = (element) => {
-    console.log("I doubled clicked the element!");
     setCurrentElement(element);
     setShowEditPosition(true);
   };
@@ -184,14 +192,12 @@ const Slide = ({ setLoggedIn }) => {
     return <div>Loading...</div>;
   }
 
-  // Ensure safe access to undefined or null properties
   const currentSlide = presentation?.slides?.[activeSlideIndex];
   const isFirstSlide = activeSlideIndex === 0;
   const isLastSlide = activeSlideIndex === presentation.slides.length - 1;
 
   return (
     <div className="content-container">
-      {/* Top Bar */}
       <div className="topBar">
         <div className="leftSection">
           <div className='stack'>
@@ -200,9 +206,9 @@ const Slide = ({ setLoggedIn }) => {
           </div>
         </div>
         <div className="centerSection">
-          <img className="topIcon" src={TextIcon} alt="Text Icon" onClick={() => setShowAddText(true)}/>
+          <img className="topIcon" src={TextIcon} alt="Text Icon" onClick={() => setShowAddText(true)} />
           <img className="topIcon" src={ImageIcon} alt="Image Icon" onClick={() => setShowAddImage(true)} />
-          <img className="topIcon" src={VideoIcon} alt="Video Icon" />
+          <img className="topIcon" src={VideoIcon} alt="Video Icon" onClick={() => setShowAddVideo(true)} />
           <img className="topIcon" src={CodeIcon} alt="Code Icon" />
         </div>
         <div className="rightSection">
@@ -215,7 +221,6 @@ const Slide = ({ setLoggedIn }) => {
         </div>
       </div>
 
-      {/* Content Section */}
       <div className="slideContainer">
         <Sidebar
           slides={presentation.slides}
@@ -229,70 +234,61 @@ const Slide = ({ setLoggedIn }) => {
             <>
               {presentation.slides.length > 1 && (
                 <div className='arrowDiv'>
-                  <img 
-                    className={`topIcon ${isFirstSlide ? 'disabled' : ''}`} 
-                    src={leftArrow} 
-                    alt="Prev Slide" 
-                    onClick={handlePreviousSlide} 
-                    disabled={isFirstSlide}
-                  />
-                  <img 
-                    className={`topIcon ${isLastSlide ? 'disabled' : ''}`} 
-                    src={rightArrow} 
-                    alt="Next Slide" 
-                    onClick={handleNextSlide} 
-                    disabled={isLastSlide}
-                  />
+                  <img className={`topIcon ${isFirstSlide ? 'disabled' : ''}`} src={leftArrow} alt="Prev Slide" onClick={handlePreviousSlide} disabled={isFirstSlide} />
+                  <img className={`topIcon ${isLastSlide ? 'disabled' : ''}`} src={rightArrow} alt="Next Slide" onClick={handleNextSlide} disabled={isLastSlide} />
                 </div>
               )}
 
               <div className="slideEditor">
                 <div className="slideNumber">
-                  {presentation.slides.length === 1 ? '1' : activeSlideIndex + 1}         
+                  {presentation.slides.length === 1 ? '1' : activeSlideIndex + 1}
                 </div>
+
                 {/* Render elements for the active slide */}
                 <div className="slideContent">
-                  {presentation.slides[activeSlideIndex]?.textElements?.map((element, index) => {
-                    if (element.type === 'text') {
-                      return (
-                        <Text
-                          key={`text-${index}`}
-                          width={element.size.width}
-                          height={element.size.height}
-                          content={element.content}
-                          fontSize={element['font-size']}
-                          color={element.colour}
-                          position={element.position}
-                          onClick={() => handleClick(element)}
-                        />
-                      );
-                    }
-                    return null;
-                  })}
-                  
-                  {presentation.slides[activeSlideIndex]?.imageElements?.map((element, index) => {
-                    if (element.type === 'image') {
-                      return (
-                        <Image
-                          key={`image-${index}`}
-                          src={element.file}
-                          width={element.size.width}
-                          height={element.size.height}
-                          position={element.position}
-                          altTag={element['alt-tag']}
-                          onClick={() => handleClick(element)}
-                        />
-                      );
-                    }
-                    return null;
-                  })}
-                </div>                        
-              </div>
-              <button className="deleteButton" onClick={handleDeleteSlide}>Delete Slide</button>
+                  {currentSlide?.textElements?.map((element, index) => (
+                    <Text
+                      key={`text-${index}`}
+                      width={element.size.width}
+                      height={element.size.height}
+                      content={element.content}
+                      fontSize={element['font-size']}
+                      color={element.colour}
+                      position={element.position}
+                      onClick={() => handleClick(element)}
+                    />
+                  ))}
 
+                  {currentSlide?.imageElements?.map((element, index) => (
+                    <Image
+                      key={`image-${index}`}
+                      src={element.file}
+                      width={element.size.width}
+                      height={element.size.height}
+                      position={element.position}
+                      altTag={element['alt-tag']}
+                      onClick={() => handleClick(element)}
+                    />
+                  ))}
+
+                  {currentSlide?.videoElements?.map((element, index) => (
+                    <Video
+                      key={`video-${index}`}
+                      url={element.url}
+                      width={element.size.width}
+                      height={element.size.height}
+                      position={element.position}
+                      autoPlay={element.autoPlay}
+                      onClick={() => handleClick(element)}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              <button className="deleteButton" onClick={handleDeleteSlide}>Delete Slide</button>
             </>
           ) : (
-            <div className='SlideEditor'></div> // Blank template when no slides
+            <div className='SlideEditor'></div>
           )}
         </div>
       </div>
@@ -310,8 +306,8 @@ const Slide = ({ setLoggedIn }) => {
             updatedSlides[activeSlideIndex] = {
               ...updatedSlides[activeSlideIndex],
               textElements: [
-                ...(updatedSlides[activeSlideIndex].textElements || []), 
-                textElement
+                ...(updatedSlides[activeSlideIndex].textElements || []),
+                textElement,
               ],
             };
             savePresentationData({ ...presentation, slides: updatedSlides });
@@ -323,6 +319,13 @@ const Slide = ({ setLoggedIn }) => {
         <AddImage
           onClose={() => setShowAddImage(false)}
           onSave={(imageElement) => handleSaveImage(imageElement)}
+        />
+      )}
+
+      {showAddVideo && (
+        <AddVideo
+          onClose={() => setShowAddVideo(false)}
+          onSave={(videoElement) => handleSaveVideo(videoElement)}
         />
       )}
 
@@ -352,8 +355,8 @@ const Slide = ({ setLoggedIn }) => {
                 [elementArrayName]: updatedElements,
               };
 
-            savePresentationData({ ...presentation, slides: updatedSlides });
-            setShowEditPosition(false);
+              savePresentationData({ ...presentation, slides: updatedSlides });
+              setShowEditPosition(false);
             }
           }}
         />
