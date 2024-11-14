@@ -2,16 +2,14 @@ import { useState } from 'react';
 import '../styling/Create.css';
 
 const AddImage = ({ onClose, onSave }) => {
-  const [width, setWidth] = useState(100);
-  const [height, setHeight] = useState(100);
-  const [file, setFile] = useState(null);
+  const [width, setWidth] = useState();
+  const [height, setHeight] = useState();
   const [altTag, setAltTag] = useState('');
   const [imageSrc, setImageSrc] = useState('');
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
-      setFile(selectedFile);
       const reader = new FileReader();
       reader.onloadend = () => {
         setImageSrc(reader.result);
@@ -35,7 +33,7 @@ const AddImage = ({ onClose, onSave }) => {
 
   return (
     <div>
-      <button onClick={() => setWidth(100) && setHeight(100)}>Add Image</button>
+      <button onClick={() => setWidth() && setHeight()}>Add Image</button>
 
       <div className="modalBackground">
         <div className="modalContent">
@@ -47,7 +45,7 @@ const AddImage = ({ onClose, onSave }) => {
               value={width}
               onChange={(e) => setWidth(Number(e.target.value))}
               min="0"
-              max="1000"
+              max="100"
             />
           </label>
           <label>
@@ -57,7 +55,7 @@ const AddImage = ({ onClose, onSave }) => {
               value={height}
               onChange={(e) => setHeight(Number(e.target.value))}
               min="0"
-              max="1000"
+              max="100"
             />
           </label>
           <label>

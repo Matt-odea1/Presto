@@ -2,8 +2,8 @@ import { useState } from 'react';
 import '../styling/Create.css';
 
 const AddVideo = ({ onClose, onSave }) => {
-  const [width, setWidth] = useState(560);
-  const [height, setHeight] = useState(315);
+  const [width, setWidth] = useState();
+  const [height, setHeight] = useState();
   const [videoUrl, setVideoUrl] = useState('');
   const [autoPlay, setAutoPlay] = useState(false);
 
@@ -34,7 +34,7 @@ const AddVideo = ({ onClose, onSave }) => {
               value={width}
               onChange={(e) => setWidth(Number(e.target.value))}
               min="0"
-              max="1000"
+              max="100"
             />
           </label>
           <label>
@@ -44,7 +44,7 @@ const AddVideo = ({ onClose, onSave }) => {
               value={height}
               onChange={(e) => setHeight(Number(e.target.value))}
               min="0"
-              max="1000"
+              max="100"
             />
           </label>
           <label>

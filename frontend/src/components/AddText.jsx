@@ -2,8 +2,8 @@ import { useState } from 'react';
 import '../styling/Create.css'
 
 const AddText = ({ onClose, onSave }) => {
-  const [width, setWidth] = useState(50);
-  const [height, setHeight] = useState(50);
+  const [width, setWidth] = useState();
+  const [height, setHeight] = useState();
   const [text, setText] = useState('');
   const [fontSize, setFontSize] = useState(11);
   const [color, setColor] = useState('#000000');
@@ -24,7 +24,7 @@ const AddText = ({ onClose, onSave }) => {
 
   return (
     <div>
-      <button onClick={() => setWidth(50) && setHeight(50)}>Add Text</button>
+      <button onClick={() => setWidth() && setHeight()}>Add Text</button>
       
       <div className="modalBackground">
         <div className="modalContent">
