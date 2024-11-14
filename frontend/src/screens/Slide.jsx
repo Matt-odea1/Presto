@@ -65,11 +65,11 @@ const Slide = () => {
             <img className="topIcon" src={CodeIcon} alt="Code Icon" />
           </div>
           <div className="rightSection">
+            <h2 className="slideTitle">{presentation.name}</h2>
             <div className="stack">
-              <button className="topButton">Edit Thumbnail</button>
+              <button className="topButton">Change Thumbnail</button>
               <button className="topButton">Delete Presentation</button>
             </div>
-            <h2 className="slideTitle">{presentation.name}</h2>
           </div>
         </div>
 
