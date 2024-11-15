@@ -28,7 +28,6 @@ const Register = (props) => {
     setPasswordError("");
     setConfirmPasswordError("");
 
-    // Validation checks
     if (!name) {
       setNameError("Please enter your name");
       return;
@@ -105,9 +104,11 @@ const Register = (props) => {
       <div className="titleContainer">
         <div>Register</div>
       </div>
-      <button className="backButton" onClick={onBackButtonClick}>
-        Back to Landing Page
-      </button>
+      <div>
+        <button className="backButton" onClick={onBackButtonClick}>
+          Back to Landing Page
+        </button>
+      </div>
       <br />
       
       {/* Use form for better accessibility */}
@@ -154,10 +155,10 @@ const Register = (props) => {
           <label className="errorLabel">{confirmPasswordError}</label>
         </div>
         <br />
-        <div className="inputContainer">
+        <div className="flexCenter">
           {/* Submit button for the form */}
           <input
-            className="inputButton"
+            className="loginButton"
             type="submit"
             value="Register"
           />

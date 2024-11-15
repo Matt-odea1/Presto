@@ -94,6 +94,7 @@ const Preview = () => {
                 onClick={handlePreviousSlide}
                 disabled={isFirstSlide}
               />
+              <button className='topButton' onClick={handleBackToEditing}>Back to Editing</button>
               <img
                 className={`topIcon ${isLastSlide ? "disabled" : ""}`}
                 src={rightArrow}
@@ -108,9 +109,6 @@ const Preview = () => {
             <div className="slideNumber">
               {presentation.slides.length === 1 ? "1" : activeSlideIndex + 1}
             </div>
-            <button className='topButton' onClick={handleBackToEditing}>Back to Editing</button>
-
-
             <div className="slideContent">
               {currentSlide?.textElements?.map((element, index) => (
                 <Text

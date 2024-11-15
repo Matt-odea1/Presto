@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import LogoutButton from '../components/Logout';
 import { getData, useCustomNavigation } from '../components/Router';
 import CreatePresentation from '../components/CreatePresentation';
@@ -7,6 +8,7 @@ import '../styling/dashboard.css';
 import logo from '../assets/presto.png';
 
 const Dashboard = ({ setLoggedIn }) => {
+  const navigate = useNavigate();
   const [userData, setUserData] = useState(undefined);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -66,7 +68,7 @@ const Dashboard = ({ setLoggedIn }) => {
 
   const handleView = () => {
     closeOptions();
-    // Example: navigate(`/presentation/view/${selectedPresentation.id}`);
+    navigate(`/presentation/${selectedPresentation.id}/preview`);
     console.log(`Preview presentation with ID: ${selectedPresentation.id}`);
   };
 
@@ -114,10 +116,6 @@ const Dashboard = ({ setLoggedIn }) => {
         ) : (
           <div>No presentations available</div>
         )}
-        <div>Box 1</div>
-        <div>Box 2</div>
-        <div>Box 3</div>
-        <div>Box 4</div>
       </div>
 
       {isModalOpen && (

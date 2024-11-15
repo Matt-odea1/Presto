@@ -44,7 +44,7 @@
   .contentArea {
     width: 100vw;
     height: auto;
-    background-color: #ededed;
+    background-color: #80a8d347;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-auto-rows: min-content;
@@ -55,7 +55,7 @@
   }
   
   .contentArea > div {
-    background-color: #f4f4f4;
+    background-color: #fbfbfb;
     padding: 10px 5px;
     border: 1px solid #ddd;
     aspect-ratio: 2 / 1;
@@ -115,6 +115,14 @@
   
   .closeButton {
     color: red;
+  }
+
+  .editButton {
+    color: green;
+  }
+
+  .previewButton {
+    color: blue;
   }
 
   .newPreso {
