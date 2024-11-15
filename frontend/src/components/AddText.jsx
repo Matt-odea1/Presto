@@ -54,13 +54,13 @@ const AddText = ({ onClose, onSave }) => {
             <textarea value={text} onChange={(e) => setText(e.target.value)} />
           </label>
           <label>
-            Font Size (px):
+            Font Size (em):
             <input
               type="number"
               step="1"
               value={fontSize}
               onChange={(e) => setFontSize(Number(e.target.value))}
-              min="1"
+              min="0.05"
             />
           </label>
           <label>

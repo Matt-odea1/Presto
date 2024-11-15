@@ -55,6 +55,11 @@ function App() {
             element={loggedIn ? <Slide setLoggedIn={setLoggedIn} /> : <Navigate to="/" />} 
           />
 
+          <Route 
+            path="/presentation/:id/slide/:slideIndex" 
+            element={loggedIn ? <Slide setLoggedIn={setLoggedIn} /> : <Navigate to="/" />} 
+          />
+
         </Routes>
       </BrowserRouter>
     </div>

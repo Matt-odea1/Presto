@@ -24,11 +24,11 @@ import leftArrow from '../assets/left-arrow.svg';
 import rightArrow from '../assets/right-arrow.svg';
 
 const Slide = ({ setLoggedIn }) => {
-  const { id } = useParams();
+  const { id, slideIndex } = useParams(); 
   const navigate = useNavigate();
   const [presentation, setPresentation] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [activeSlideIndex, setActiveSlideIndex] = useState(0);
+  const [activeSlideIndex, setActiveSlideIndex] = useState(parseInt(slideIndex) || 0);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [showChangeThumbnail, setShowChangeThumbnail] = useState(false);
   const [showAddText, setShowAddText] = useState(false);
@@ -86,6 +86,12 @@ const Slide = ({ setLoggedIn }) => {
 
     fetchPresentationData();
   }, [id]);
+
+  useEffect(() => {
+    if (presentation && activeSlideIndex != 0) {
+      navigate(`/presentation/${id}/slide/${activeSlideIndex}`);
+    }
+  }, [activeSlideIndex, id, navigate, presentation]);
 
   // SAVE DATA
   const savePresentationData = async (updatedPresentation) => {
