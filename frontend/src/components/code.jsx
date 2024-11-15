@@ -2,28 +2,26 @@ import { useState } from "react";
 import Prism from "prismjs"; // Import Prism for syntax highlighting
 import "prismjs/themes/prism.css";
 
-const Code = ({ code, width, height, position, language, onClick }) => {
+const Code = ({ code, width, height, position, language = "javascript", onClick }) => {
   const [codeContent, setCodeContent] = useState(code || "");
 
   // Automatically detect and highlight syntax based on the selected language
   const getLanguageClass = (language) => {
-    switch (language) {
-    case "Python":
-      return "language-python";
-    case "C":
-      return "language-c";
-    case "Javascript":
-      return "language-javascript";
-    default:
-      return "language-javascript"; // Default to Javascript
+    const safeLanguage = (typeof language === 'string' && language) ? language.toLowerCase() : 'javascript';
+    switch (safeLanguage) {
+      case 'python':
+        return 'python';
+      case 'c':
+        return 'c';
+      case 'javascript':
+        return 'javascript';
+      default:
+        return 'javascript';
     }
   };
 
-  const highlightedCode = Prism.highlight(
-    codeContent,
-    Prism.languages[getLanguageClass(language)],
-    language.toLowerCase()
-  );
+  const languageClass = getLanguageClass(language);
+  const highlightedCode = Prism.highlight(codeContent, Prism.languages[languageClass], languageClass);
 
   const containerStyle = {
     position: "absolute",
@@ -52,7 +50,7 @@ const Code = ({ code, width, height, position, language, onClick }) => {
     <div style={containerStyle} onClick={onClick}>
       <pre style={codeStyle}>
         <code
-          className={getLanguageClass(language)}
+          className={`language-${languageClass}`}
           dangerouslySetInnerHTML={{ __html: highlightedCode }}
         />
       </pre>
