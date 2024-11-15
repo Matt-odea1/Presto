@@ -1,5 +1,5 @@
 import { useCustomNavigation } from './../components/Router';
-import logo from '../assets/presto.png';
+import logo from '../assets/Presto.png';
 import '../styling/login.css'
 
 const Home = (props) => {
