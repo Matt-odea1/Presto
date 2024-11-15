@@ -5,7 +5,7 @@ import { getData, useCustomNavigation } from '../components/Router';
 import CreatePresentation from '../components/CreatePresentation';
 import PresentationOptions from '../components/PresentationOptions';
 import '../styling/dashboard.css';
-import logo from '../assets/presto.png';
+import logo from '../assets/Presto.png';
 
 const Dashboard = ({ setLoggedIn }) => {
   const navigate = useNavigate();
