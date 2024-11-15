@@ -108,6 +108,8 @@ const Preview = () => {
             <div className="slideNumber">
               {presentation.slides.length === 1 ? "1" : activeSlideIndex + 1}
             </div>
+            <button className='topButton' onClick={handleBackToEditing}>Back to Editing</button>
+
 
             <div className="slideContent">
               {currentSlide?.textElements?.map((element, index) => (
@@ -164,7 +166,7 @@ const Preview = () => {
           </div>
 
           <div className="controls">
-            <button onClick={handleBackToEditing}>Back to Editing</button>
+            
           </div>
         </>
       ) : (

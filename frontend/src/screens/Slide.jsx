@@ -286,7 +286,7 @@ const Slide = ({ setLoggedIn }) => {
               </div>
               <div className='controls'>
                 <button className="deleteButton" onClick={handleDeleteSlide}>Delete Slide</button>
-                <button onClick={() => navigate(`/presentation/${id}/preview`)}>Presenter Mode</button>
+                <button className="topButton" onClick={() => navigate(`/presentation/${id}/preview`)}>Presenter Mode</button>
                 <button className="topButton" onClick={console.log("")}>Change Slide Background</button>
               </div>
             </>
