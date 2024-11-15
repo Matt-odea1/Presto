@@ -190,7 +190,7 @@ const Slide = ({ setLoggedIn }) => {
         </div>
         <div className="rightSection">
           <h2 className="slideTitle">{presentation?.name || 'Loading...'}</h2>
-          <img className="topIcon" src={presentation?.thumbnail || ''} alt="Thumbnail" />
+          <img className="topIcon" src={presentation?.thumbnailPreview || ''} alt="Thumbnail" />
           <div className="stack">
             <button className="topButton" onClick={() => setShowChangeThumbnail(true)}>Change Thumbnail</button>
             <button className="topButton" onClick={() => setShowDeletePopup(true)}>Delete Presentation</button>

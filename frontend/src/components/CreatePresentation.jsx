@@ -6,9 +6,9 @@ const CreatePresentation = ({ closeModal, userData, setUserData }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [thumbnail, setThumbnail] = useState(null);
+  const [thumbnailPreview, setThumbnailPreview] = useState(null); // State to hold the preview URL
   const [loading, setLoading] = useState(true);
   const { navigateToSlideDeck } = useCustomNavigation(); 
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,7 +28,15 @@ const CreatePresentation = ({ closeModal, userData, setUserData }) => {
   }, [setUserData]);
 
   const handleFileChange = (e) => {
-    setThumbnail(e.target.files[0]);
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setThumbnail(selectedFile);
+        setThumbnailPreview(reader.result); // Set preview URL
+      };
+      reader.readAsDataURL(selectedFile);
+    }
   };
 
   const handleCreate = async () => {
@@ -36,7 +44,7 @@ const CreatePresentation = ({ closeModal, userData, setUserData }) => {
       id: Date.now(),
       name,
       description,
-      thumbnail,
+      thumbnailPreview,
       defaultBackground: {
         colour: "#ffffff",
         img: undefined,
@@ -57,7 +65,6 @@ const CreatePresentation = ({ closeModal, userData, setUserData }) => {
     };
 
     try {
-      // Save the updated user data
       await setData(updatedUserData);
       setUserData(updatedUserData);
       closeModal();
@@ -102,6 +109,11 @@ const CreatePresentation = ({ closeModal, userData, setUserData }) => {
             accept="image/*"
           />
         </label>
+        {thumbnailPreview && (
+          <div>
+            <img src={thumbnailPreview} alt="Thumbnail Preview" width="100" />
+          </div>
+        )}
         <div className="modalActions">
           <button onClick={handleCreate}>Create</button>
           <button onClick={closeModal}>Cancel</button>

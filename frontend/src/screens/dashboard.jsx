@@ -98,17 +98,17 @@ const Dashboard = ({ setLoggedIn }) => {
             <div
               key={presentation.id}
               className="presentationItem"
-              onClick={() => openOptions(presentation)}  // Open options on click
+              onClick={() => openOptions(presentation)}
             >
               <img
-                src={presentation.thumbnail instanceof File 
-                  ? URL.createObjectURL(presentation.thumbnail) 
-                  : ''}
+                src={presentation.thumbnailPreview}
                 alt="Thumbnail"
                 className="presentationThumbnail"
               />
-              <h3>{presentation.name}</h3>
-              <p>{presentation.description}</p>
+              <div>
+                <h3>{presentation.name}</h3>
+                <p>{presentation.description}</p>
+              </div>
             </div>
           ))
         ) : (

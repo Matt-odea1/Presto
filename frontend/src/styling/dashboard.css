@@ -56,7 +56,7 @@
   
   .contentArea > div {
     background-color: #f4f4f4;
-    padding: 20px 10px;
+    padding: 10px 5px;
     border: 1px solid #ddd;
     aspect-ratio: 2 / 1;
     min-width: 100px;
@@ -68,10 +68,18 @@
     box-shadow: 0 6px 12px rgba(82, 115, 223, 0.326);
   }
 
+  .presentationItem {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
+  }
+
   .presentationThumbnail {
-    width: 100%; 
-    height: auto;
-    max-height: 70%;
+    width: auto; 
+    max-width: 60%;
+    height: 100%;
+    overflow: hidden;
     object-fit: cover; 
     border-radius: 8px;
   }
@@ -119,3 +127,34 @@
     border-radius: 8px;
     cursor: pointer;
   }
+
+  h3 {
+    margin-left: 10px;
+    font-size: 0.8em;
+    margin-top: 0px;
+  }
+
+  p {
+    margin: 0px 8px 0px;
+    font-size: 0.6em;
+    padding-left: 0;
+  }
+
+  @media (max-width: 768px) {
+    .presentationThumbnail {
+      display: none;
+    }
+
+    h3 {
+      margin-left: 10px;
+      font-size: 0.6em;
+      margin-top: 0px;
+    }
+  
+    p {
+      margin: 0px 8px 0px;
+      font-size: 0.4em;
+      padding-left: 0;
+    }
+  }
+
