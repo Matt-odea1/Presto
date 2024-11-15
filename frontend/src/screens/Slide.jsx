@@ -238,7 +238,7 @@ const Slide = ({ setLoggedIn }) => {
                       color={element.colour}
                       position={element.position}
                       fontFamily={element.fontFamily}
-                      layer={element.layer || 0} // Apply layer as z-index
+                      layer={element.layer || 0} 
                       onClick={() => handleClick(element)}
                     />
                   ))}
@@ -251,7 +251,7 @@ const Slide = ({ setLoggedIn }) => {
                       height={element.size.height}
                       position={element.position}
                       altTag={element['alt-tag']}
-                      layer={element.layer || 0} // Apply layer as z-index
+                      layer={element.layer || 0}
                       onClick={() => handleClick(element)}
                     />
                   ))}
@@ -264,7 +264,7 @@ const Slide = ({ setLoggedIn }) => {
                       height={element.size.height}
                       position={element.position}
                       autoPlay={element.autoPlay}
-                      layer={element.layer || 0} // Apply layer as z-index
+                      layer={element.layer || 0}
                       onClick={() => handleClick(element)}
                     />
                   ))}
@@ -278,14 +278,17 @@ const Slide = ({ setLoggedIn }) => {
                       code={element.code}
                       language={element.language}
                       fontFamily={element.fontFamily}
-                      layer={element.layer || 0} // Apply layer as z-index
+                      layer={element.layer || 0}
                       onClick={() => handleClick(element)}
                     />
                   ))}
                 </div>
               </div>
-
-              <button className="deleteButton" onClick={handleDeleteSlide}>Delete Slide</button>
+              <div className='controls'>
+                <button className="deleteButton" onClick={handleDeleteSlide}>Delete Slide</button>
+                <button onClick={() => navigate(`/presentation/${id}/preview`)}>Presenter Mode</button>
+                <button className="topButton" onClick={console.log("")}>Change Slide Background</button>
+              </div>
             </>
           ) : (
             <div className='SlideEditor'></div>

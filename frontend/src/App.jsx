@@ -4,6 +4,7 @@ import Login from './screens/login';
 import Register from './screens/register'; 
 import Dashboard from './screens/dashboard';
 import Slide from './screens/Slide';
+import Preview from './screens/preview';
 import './styling/App.css';
 import './styling/index.css';
 import { useState, useEffect } from 'react';
@@ -58,6 +59,16 @@ function App() {
           <Route 
             path="/presentation/:id/slide/:slideIndex" 
             element={loggedIn ? <Slide setLoggedIn={setLoggedIn} /> : <Navigate to="/" />} 
+          />
+
+          <Route 
+            path="/presentation/:id/preview"
+            element={loggedIn ? <Preview /> : <Navigate to="/" />} 
+          />
+
+          <Route 
+            path="/presentation/:id/preview/:slideIndex"
+            element={loggedIn ? <Preview /> : <Navigate to="/" />} 
           />
 
         </Routes>

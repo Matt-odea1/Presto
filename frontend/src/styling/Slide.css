@@ -134,7 +134,7 @@ button:hover {
   border-radius: 4px;
   font-size: 0.9rem;
   cursor: pointer;
-  margin-top: 15px;
+  margin-top: 5px;
 }
 
 .slideNumber {
@@ -150,6 +150,23 @@ button:hover {
   color: #333;
   border-radius: 5px;
   text-align: center;
+}
+
+.controls {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.previewSlideViewer {
+  margin-top: 3%;
+  display: flex;
+  flex-direction: column;
+  aspect-ratio: 2 / 1;
+  width: 96vw;
+  background: lightsteelblue;
+  border-radius: 5px;
+  position: relative;
 }
 
 
