@@ -60,7 +60,6 @@ const Slide = ({ setLoggedIn }) => {
   }, [presentation, activeSlideIndex, showDeletePopup, showChangeThumbnail, showAddText, showEditPosition, showAddImage, showAddVideo, showAddCode]);
 
   // HANDLE DOUBLE CLICK;
-  console.log("click");
   const handleClick = (element) => {
     setClickCount((prev) => prev + 1);
     setTimeout(() => {
@@ -321,21 +320,51 @@ const Slide = ({ setLoggedIn }) => {
       {showAddImage && (
         <AddImage
           onClose={() => setShowAddImage(false)}
-          onSave={(imageElement) => handleSaveImage(imageElement)}
+          onSave={(imageElement) => {
+            const updatedSlides = [...presentation.slides];
+            updatedSlides[activeSlideIndex] = {
+              ...updatedSlides[activeSlideIndex],
+              imageElements: [
+                ...(updatedSlides[activeSlideIndex].imageElements || []),
+                imageElement,
+              ],
+            };
+            savePresentationData({ ...presentation, slides: updatedSlides });
+          }}
         />
       )}
 
       {showAddVideo && (
         <AddVideo
           onClose={() => setShowAddVideo(false)}
-          onSave={(videoElement) => handleSaveVideo(videoElement)}
+          onSave={(videoElement) => {
+            const updatedSlides = [...presentation.slides];
+            updatedSlides[activeSlideIndex] = {
+              ...updatedSlides[activeSlideIndex],
+              videoElements: [
+                ...(updatedSlides[activeSlideIndex].videoElements || []),
+                videoElement,
+              ],
+            };
+            savePresentationData({ ...presentation, slides: updatedSlides });
+          }}
         />
       )}
 
       {showAddCode && (
         <AddCode
           onClose={() => setShowAddCode(false)}
-          onSave={(codeElement) => handleSaveCode(codeElement)}
+          onSave={(codeElement) => {
+            const updatedSlides = [...presentation.slides];
+            updatedSlides[activeSlideIndex] = {
+              ...updatedSlides[activeSlideIndex],
+              codeElements: [
+                ...(updatedSlides[activeSlideIndex].codeElements || []),
+                codeElement,
+              ],
+            };
+            savePresentationData({ ...presentation, slides: updatedSlides });
+          }}
         />
       )}
 
