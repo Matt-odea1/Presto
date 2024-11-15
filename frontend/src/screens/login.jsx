@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import ErrorPopup from './../components/ErrorPopup';
+import '../styling/login.css'
+
 
 const Login = (props) => {
   const { setLoggedIn, setEmail } = props;
@@ -64,14 +66,16 @@ const Login = (props) => {
       <div className="titleContainer">
         <div>Login</div>
       </div>
-      <button className="backButton" onClick={onBackButtonClick}>
+      <div>
+      <button onClick={onBackButtonClick}>
         Back to Landing Page
       </button>
+      </div>
       <br />
       
       {/* Use form for better accessibility */}
       <form onSubmit={onFormSubmit}>
-        <div className="inputContainer">
+        <div>
           <input
             value={email}
             placeholder="Enter your email here"
@@ -81,7 +85,7 @@ const Login = (props) => {
           <label className="errorLabel">{emailError}</label>
         </div>
         <br />
-        <div className="inputContainer">
+        <div>
           <input
             type="password"
             value={password}
@@ -92,9 +96,9 @@ const Login = (props) => {
           <label className="errorLabel">{passwordError}</label>
         </div>
         <br />
-        <div className="inputContainer">
+        <div className='flexCenter'>
           <input
-            className="inputButton"
+            className="loginButton"
             type="submit"
             value="Log in"
           />

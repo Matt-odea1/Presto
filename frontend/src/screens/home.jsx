@@ -1,4 +1,6 @@
 import { useCustomNavigation } from './../components/Router';
+import logo from '../assets/presto.png';
+import '../styling/login.css'
 
 const Home = (props) => {
   const { loggedIn, setLoggedIn } = props;
@@ -7,12 +9,12 @@ const Home = (props) => {
   return (
     <div className="mainContainer">
       <div className="titleContainer">
-        <div>Welcome!</div>
+        <img className='loginLogo' src={logo} alt="Logo" />
       </div>
-      <div>This is the landing page. Please log in or register.</div>
+      <div className='landingText'> Please log in or register to access Presto</div>
       <div className="buttonContainer">
         <input
-          className="inputButton"
+          className="loginButton"
           type="button"
           onClick={() => navigateToLogin(loggedIn, setLoggedIn)}
           value={loggedIn ? 'Log out' : 'Log in'}
@@ -20,7 +22,7 @@ const Home = (props) => {
         {!loggedIn && (
           <div>
             <input
-              className="inputButton"
+              className="loginButton"
               type="button"
               onClick={navigateToRegister}
               value="Register"

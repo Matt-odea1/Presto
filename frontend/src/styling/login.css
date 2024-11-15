@@ -1,0 +1,38 @@
+.loginLogo {
+    width: 70%;
+    height:auto;
+}
+
+.landingText {
+    font-size: 1em;
+    font-weight: 800;
+    color: rgb(7, 20, 64);
+}
+
+.mainContainer {
+    background: #80a8d347;
+    display: flex;
+    justify-content: center;
+}
+
+.loginButton {
+    width: 15vw;
+    height: 8vh;
+    font-weight: 800;
+    font-size: 2em;
+    min-width: 200px;
+    background-color: #5a67d8;
+    color: white;
+    border: none;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    margin-top: 5px;
+}
+
+.flexCenter {
+    display: flex;
+    align-content: center;
+    justify-content: center;
+}
