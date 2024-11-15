@@ -1,27 +1,41 @@
 import { useState } from "react";
-import Prism from "prismjs"; // Import Prism for syntax highlighting
+import Prism from "prismjs";
 import "prismjs/themes/prism.css";
 
-const Code = ({ code, width, height, position, language = "javascript", onClick }) => {
+const Code = ({
+  code,
+  width,
+  height,
+  position,
+  language = "javascript",
+  fontFamily = "monospace",
+  onClick,
+}) => {
   const [codeContent, setCodeContent] = useState(code || "");
 
   // Automatically detect and highlight syntax based on the selected language
   const getLanguageClass = (language) => {
-    const safeLanguage = (typeof language === 'string' && language) ? language.toLowerCase() : 'javascript';
+    const safeLanguage = (typeof language === "string" && language)
+      ? language.toLowerCase()
+      : "javascript";
     switch (safeLanguage) {
-      case 'python':
-        return 'python';
-      case 'c':
-        return 'c';
-      case 'javascript':
-        return 'javascript';
+      case "python":
+        return "python";
+      case "c":
+        return "c";
+      case "javascript":
+        return "javascript";
       default:
-        return 'javascript';
+        return "javascript";
     }
   };
 
   const languageClass = getLanguageClass(language);
-  const highlightedCode = Prism.highlight(codeContent, Prism.languages[languageClass], languageClass);
+  const highlightedCode = Prism.highlight(
+    codeContent,
+    Prism.languages[languageClass],
+    languageClass
+  );
 
   const containerStyle = {
     position: "absolute",
@@ -35,7 +49,7 @@ const Code = ({ code, width, height, position, language = "javascript", onClick 
     alignItems: "center",
     justifyContent: "center",
     cursor: "pointer",
-    fontFamily: "monospace",
+    fontFamily: fontFamily,
     whiteSpace: "pre-wrap",
   };
 

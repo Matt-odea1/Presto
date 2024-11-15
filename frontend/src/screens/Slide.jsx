@@ -245,6 +245,7 @@ const Slide = ({ setLoggedIn }) => {
                       fontSize={element['font-size']}
                       color={element.colour}
                       position={element.position}
+                      fontFamily={element.fontFamily}
                       onClick={() => handleClick(element)}
                     />
                   ))}
@@ -281,6 +282,7 @@ const Slide = ({ setLoggedIn }) => {
                       position={element.position}
                       code={element.code}
                       language={element.language}
+                      fontFamily={element.fontFamily}
                       onClick={() => handleClick(element)}
                     />
                   ))}

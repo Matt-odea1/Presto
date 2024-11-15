@@ -5,6 +5,7 @@ const Text = ({
   fontSize,
   color,
   position,
+  fontFamily = 'monospace',
   onClick,
 }) => {
   const textStyle = {
@@ -15,6 +16,7 @@ const Text = ({
     top: `${position?.y}%`,
     fontSize: `${fontSize}em`,
     color: color,
+    fontFamily: fontFamily,
     whiteSpace: "pre-wrap",
     zIndex: 10,
     border: "1px solid grey",
