@@ -1,47 +1,51 @@
-import { useState } from 'react';
-import Prism from 'prismjs'; // Import Prism for syntax highlighting
-import 'prismjs/themes/prism.css';
+import { useState } from "react";
+import Prism from "prismjs"; // Import Prism for syntax highlighting
+import "prismjs/themes/prism.css";
 
 const Code = ({ code, width, height, position, language, onClick }) => {
-  const [codeContent, setCodeContent] = useState(code || '');
+  const [codeContent, setCodeContent] = useState(code || "");
 
   // Automatically detect and highlight syntax based on the selected language
   const getLanguageClass = (language) => {
     switch (language) {
-      case 'Python':
-        return 'language-python';
-      case 'C':
-        return 'language-c';
-      case 'Javascript':
-        return 'language-javascript';
-      default:
-        return 'language-javascript'; // Default to Javascript
+    case "Python":
+      return "language-python";
+    case "C":
+      return "language-c";
+    case "Javascript":
+      return "language-javascript";
+    default:
+      return "language-javascript"; // Default to Javascript
     }
   };
 
-  const highlightedCode = Prism.highlight(codeContent, Prism.languages[getLanguageClass(language)], language.toLowerCase());
+  const highlightedCode = Prism.highlight(
+    codeContent,
+    Prism.languages[getLanguageClass(language)],
+    language.toLowerCase()
+  );
 
   const containerStyle = {
-    position: 'absolute',
+    position: "absolute",
     width: `${width}%`,
     height: `${height}%`,
     left: `${position?.x}%`,
     top: `${position?.y}%`,
     zIndex: 10,
-    border: '3px solid black',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    cursor: 'pointer',
-    fontFamily: 'monospace',
-    whiteSpace: 'pre-wrap',
+    border: "3px solid black",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    cursor: "pointer",
+    fontFamily: "monospace",
+    whiteSpace: "pre-wrap",
   };
 
   const codeStyle = {
-    width: '100%',
-    height: '100%',
-    overflow: 'hidden', 
-    padding: '10px',
+    width: "100%",
+    height: "100%",
+    overflow: "hidden",
+    padding: "10px",
   };
 
   return (

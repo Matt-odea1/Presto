@@ -8,10 +8,12 @@ import DeletePresentation from '../components/deletePresentation';
 import EditPosition from '../components/editPosition';
 import AddText from '../components/AddText';
 import AddImage from '../components/AddImage';
-import AddVideo from '../components/AddVideo'; // Import AddVideo component
+import AddVideo from '../components/AddVideo';
+import AddCode from '../components/AddCode';
 import Text from '../components/text';
 import Image from '../components/image';
-import Video from '../components/video'; // Import Video component
+import Video from '../components/video';
+import Code from '../components/code';
 import '../styling/Slide.css';
 
 import TextIcon from '../assets/text-icon.svg';
@@ -32,6 +34,7 @@ const Slide = ({ setLoggedIn }) => {
   const [showAddText, setShowAddText] = useState(false);
   const [showAddImage, setShowAddImage] = useState(false);
   const [showAddVideo, setShowAddVideo] = useState(false);
+  const [showAddCode, setShowAddCode] = useState(false);
   const [showEditPosition, setShowEditPosition] = useState(false);
   const [currentElement, setCurrentElement] = useState(null);
   const [clickCount, setClickCount] = useState(0);
@@ -39,7 +42,7 @@ const Slide = ({ setLoggedIn }) => {
   // HANDLE KEY PRESSES
   useEffect(() => {
     const handleKeyPress = (event) => {
-      if (presentation && !showDeletePopup && !showChangeThumbnail && !showAddText && !showEditPosition && !showAddImage && !showAddVideo) {
+      if (presentation && !showDeletePopup && !showChangeThumbnail && !showAddText && !showEditPosition && !showAddImage && !showAddVideo && !showAddCode) {
         if (event.key === 'ArrowLeft') {
           setActiveSlideIndex((prevIndex) => Math.max(prevIndex - 1, 0));
         } else if (event.key === 'ArrowRight') {
@@ -54,7 +57,7 @@ const Slide = ({ setLoggedIn }) => {
     return () => {
       window.removeEventListener('keydown', handleKeyPress);
     };
-  }, [presentation, activeSlideIndex, showDeletePopup, showChangeThumbnail, showAddText, showEditPosition, showAddImage, showAddVideo]);
+  }, [presentation, activeSlideIndex, showDeletePopup, showChangeThumbnail, showAddText, showEditPosition, showAddImage, showAddVideo, showAddCode]);
 
   // HANDLE DOUBLE CLICK;
   console.log("click");
@@ -117,7 +120,7 @@ const Slide = ({ setLoggedIn }) => {
       textElements: [],
       imageElements: [],
       videoElements: [],
-      codeElements: [],
+      codeElements: [], // Add codeElements to slide
     };
     const updatedPresentation = {
       ...presentation,
@@ -132,27 +135,14 @@ const Slide = ({ setLoggedIn }) => {
     }
   };
 
-  // SAVE NEW IMAGE
-  const handleSaveImage = async (imageElement) => {
+  // SAVE NEW CODE
+  const handleSaveCode = async (codeElement) => {
     const updatedSlides = [...presentation.slides];
     updatedSlides[activeSlideIndex] = {
       ...updatedSlides[activeSlideIndex],
-      imageElements: [
-        ...(updatedSlides[activeSlideIndex].imageElements || []),
-        imageElement,
-      ],
-    };
-    await savePresentationData({ ...presentation, slides: updatedSlides });
-  };
-
-  // SAVE NEW VIDEO
-  const handleSaveVideo = async (videoElement) => {
-    const updatedSlides = [...presentation.slides];
-    updatedSlides[activeSlideIndex] = {
-      ...updatedSlides[activeSlideIndex],
-      videoElements: [
-        ...(updatedSlides[activeSlideIndex].videoElements || []),
-        videoElement,
+      codeElements: [
+        ...(updatedSlides[activeSlideIndex].codeElements || []),
+        codeElement,
       ],
     };
     await savePresentationData({ ...presentation, slides: updatedSlides });
@@ -210,7 +200,7 @@ const Slide = ({ setLoggedIn }) => {
           <img className="topIcon" src={TextIcon} alt="Text Icon" onClick={() => setShowAddText(true)} />
           <img className="topIcon" src={ImageIcon} alt="Image Icon" onClick={() => setShowAddImage(true)} />
           <img className="topIcon" src={VideoIcon} alt="Video Icon" onClick={() => setShowAddVideo(true)} />
-          <img className="topIcon" src={CodeIcon} alt="Code Icon" />
+          <img className="topIcon" src={CodeIcon} alt="Code Icon" onClick={() => setShowAddCode(true)} /> {/* Add button to show AddCode modal */}
         </div>
         <div className="rightSection">
           <h2 className="slideTitle">{presentation?.name || 'Loading...'}</h2>
@@ -283,6 +273,18 @@ const Slide = ({ setLoggedIn }) => {
                       onClick={() => handleClick(element)}
                     />
                   ))}
+
+                  {currentSlide?.codeElements?.map((element, index) => (
+                    <Code
+                      key={`code-${index}`}
+                      width={element.size.width}
+                      height={element.size.height}
+                      position={element.position}
+                      code={element.code}
+                      language={element.language}
+                      onClick={() => handleClick(element)}
+                    />
+                  ))}
                 </div>
               </div>
 
@@ -327,6 +329,13 @@ const Slide = ({ setLoggedIn }) => {
         <AddVideo
           onClose={() => setShowAddVideo(false)}
           onSave={(videoElement) => handleSaveVideo(videoElement)}
+        />
+      )}
+
+      {showAddCode && (
+        <AddCode
+          onClose={() => setShowAddCode(false)}
+          onSave={(codeElement) => handleSaveCode(codeElement)}
         />
       )}
 
