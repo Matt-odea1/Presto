@@ -4,10 +4,11 @@ import '../styling/Create.css';
 const EditPosition = ({ element, onSavePosition }) => {
   const [x, setX] = useState(element.position.x);
   const [y, setY] = useState(element.position.y);
-  const [fontFamily, setFontFamily] = useState(element.fontFamily || 'monospace'); // Default to 'monospace' if not provided
+  const [fontFamily, setFontFamily] = useState(element.fontFamily || 'monospace');
+  const [layer, setLayer] = useState(element.layer || 0); // Add layer state, default to 0
 
   const handleSave = () => {
-    const updatedElement = { ...element, position: { x, y } };
+    const updatedElement = { ...element, position: { x, y }, layer };
 
     // Only add fontFamily if element type is 'code' or 'text'
     if (element.type === 'code' || element.type === 'text') {
@@ -54,6 +55,18 @@ const EditPosition = ({ element, onSavePosition }) => {
             />
           </label>
         )}
+
+        {/* Render layer field for modifying z-index */}
+        <label>
+          Layer (z-index):
+          <input
+            type="number"
+            value={layer}
+            onChange={(e) => setLayer(Number(e.target.value))}
+            min="-10"
+            max="10"
+          />
+        </label>
 
         <div className="modalActions">
           <button onClick={handleSave}>Save</button>

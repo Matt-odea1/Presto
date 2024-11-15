@@ -1,11 +1,11 @@
-const Video = ({ url, width, height, position, autoPlay, onClick }) => {
+const Video = ({ url, width, height, position, autoPlay, layer, onClick }) => {
   const containerStyle = {
     position: "absolute",
     width: `${width}%`,
     height: `${height}%`,
     left: `${position?.x}%`,
     top: `${position?.y}%`,
-    zIndex: 10,
+    zIndex: layer+10,
     border: "3px solid black", // Clickable border
     display: "flex",
     alignItems: "center",

@@ -134,19 +134,6 @@ const Slide = ({ setLoggedIn }) => {
     }
   };
 
-  // SAVE NEW CODE
-  const handleSaveCode = async (codeElement) => {
-    const updatedSlides = [...presentation.slides];
-    updatedSlides[activeSlideIndex] = {
-      ...updatedSlides[activeSlideIndex],
-      codeElements: [
-        ...(updatedSlides[activeSlideIndex].codeElements || []),
-        codeElement,
-      ],
-    };
-    await savePresentationData({ ...presentation, slides: updatedSlides });
-  };
-
   const handleDeleteSlide = async () => {
     if (presentation && presentation.slides) {
       const updatedSlides = presentation.slides.filter((slide, index) => index !== activeSlideIndex);
@@ -199,7 +186,7 @@ const Slide = ({ setLoggedIn }) => {
           <img className="topIcon" src={TextIcon} alt="Text Icon" onClick={() => setShowAddText(true)} />
           <img className="topIcon" src={ImageIcon} alt="Image Icon" onClick={() => setShowAddImage(true)} />
           <img className="topIcon" src={VideoIcon} alt="Video Icon" onClick={() => setShowAddVideo(true)} />
-          <img className="topIcon" src={CodeIcon} alt="Code Icon" onClick={() => setShowAddCode(true)} /> {/* Add button to show AddCode modal */}
+          <img className="topIcon" src={CodeIcon} alt="Code Icon" onClick={() => setShowAddCode(true)} />
         </div>
         <div className="rightSection">
           <h2 className="slideTitle">{presentation?.name || 'Loading...'}</h2>
@@ -234,7 +221,6 @@ const Slide = ({ setLoggedIn }) => {
                   {presentation.slides.length === 1 ? '1' : activeSlideIndex + 1}
                 </div>
 
-                {/* Render elements for the active slide */}
                 <div className="slideContent">
                   {currentSlide?.textElements?.map((element, index) => (
                     <Text
@@ -246,6 +232,7 @@ const Slide = ({ setLoggedIn }) => {
                       color={element.colour}
                       position={element.position}
                       fontFamily={element.fontFamily}
+                      layer={element.layer || 0} // Apply layer as z-index
                       onClick={() => handleClick(element)}
                     />
                   ))}
@@ -258,6 +245,7 @@ const Slide = ({ setLoggedIn }) => {
                       height={element.size.height}
                       position={element.position}
                       altTag={element['alt-tag']}
+                      layer={element.layer || 0} // Apply layer as z-index
                       onClick={() => handleClick(element)}
                     />
                   ))}
@@ -270,6 +258,7 @@ const Slide = ({ setLoggedIn }) => {
                       height={element.size.height}
                       position={element.position}
                       autoPlay={element.autoPlay}
+                      layer={element.layer || 0} // Apply layer as z-index
                       onClick={() => handleClick(element)}
                     />
                   ))}
@@ -283,6 +272,7 @@ const Slide = ({ setLoggedIn }) => {
                       code={element.code}
                       language={element.language}
                       fontFamily={element.fontFamily}
+                      layer={element.layer || 0} // Apply layer as z-index
                       onClick={() => handleClick(element)}
                     />
                   ))}
@@ -297,7 +287,6 @@ const Slide = ({ setLoggedIn }) => {
         </div>
       </div>
 
-      {/* Conditionally render modals */}
       {showDeletePopup && (
         <DeletePresentation presentationId={presentation.id} onCancel={() => setShowDeletePopup(false)} />
       )}
@@ -311,7 +300,7 @@ const Slide = ({ setLoggedIn }) => {
               ...updatedSlides[activeSlideIndex],
               textElements: [
                 ...(updatedSlides[activeSlideIndex].textElements || []),
-                textElement,
+                { ...textElement, layer: textElement.layer || 0 },
               ],
             };
             savePresentationData({ ...presentation, slides: updatedSlides });
@@ -328,7 +317,7 @@ const Slide = ({ setLoggedIn }) => {
               ...updatedSlides[activeSlideIndex],
               imageElements: [
                 ...(updatedSlides[activeSlideIndex].imageElements || []),
-                imageElement,
+                { ...imageElement, layer: imageElement.layer || 0 },
               ],
             };
             savePresentationData({ ...presentation, slides: updatedSlides });
@@ -345,7 +334,7 @@ const Slide = ({ setLoggedIn }) => {
               ...updatedSlides[activeSlideIndex],
               videoElements: [
                 ...(updatedSlides[activeSlideIndex].videoElements || []),
-                videoElement,
+                { ...videoElement, layer: videoElement.layer || 0 },
               ],
             };
             savePresentationData({ ...presentation, slides: updatedSlides });
@@ -362,7 +351,7 @@ const Slide = ({ setLoggedIn }) => {
               ...updatedSlides[activeSlideIndex],
               codeElements: [
                 ...(updatedSlides[activeSlideIndex].codeElements || []),
-                codeElement,
+                { ...codeElement, layer: codeElement.layer || 0 },
               ],
             };
             savePresentationData({ ...presentation, slides: updatedSlides });

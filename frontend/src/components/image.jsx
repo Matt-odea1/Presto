@@ -1,4 +1,4 @@
-const Image = ({ src, width, height, position, altTag, onClick }) => {
+const Image = ({ src, width, height, position, altTag, layer, onClick }) => {
   const imageStyle = {
     position: "absolute",
     width: `${width}%`,
@@ -6,7 +6,7 @@ const Image = ({ src, width, height, position, altTag, onClick }) => {
     left: `${position?.x}%`,
     top: `${position?.y}%`,
     objectFit: "cover",
-    zIndex: 10,
+    zIndex: layer+10,
     border: "1px solid grey",
   };
 

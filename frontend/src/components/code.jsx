@@ -9,6 +9,7 @@ const Code = ({
   position,
   language = "javascript",
   fontFamily = "monospace",
+  layer = 0,
   onClick,
 }) => {
   const [codeContent, setCodeContent] = useState(code || "");
@@ -43,7 +44,7 @@ const Code = ({
     height: `${height}%`,
     left: `${position?.x}%`,
     top: `${position?.y}%`,
-    zIndex: 10,
+    zIndex: layer+10,
     border: "3px solid black",
     display: "flex",
     alignItems: "center",

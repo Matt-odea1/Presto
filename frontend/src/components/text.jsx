@@ -6,6 +6,7 @@ const Text = ({
   color,
   position,
   fontFamily = 'monospace',
+  layer = 0,
   onClick,
 }) => {
   const textStyle = {
@@ -18,7 +19,7 @@ const Text = ({
     color: color,
     fontFamily: fontFamily,
     whiteSpace: "pre-wrap",
-    zIndex: 10,
+    zIndex: layer+10,
     border: "1px solid grey",
     overflow: "hidden",
   };
